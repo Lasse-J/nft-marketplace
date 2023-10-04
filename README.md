@@ -1,13 +1,19 @@
-# Sample Hardhat Project
+# Lasse's NFT Marketplace Portfolio Project
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
 
-Try running some of the following tasks:
+    What the project does
+This is a Ethereum testnet portfolio project that showcases NFT Marketplace functions that communicate to the blockchain.
 
-```shell
-npx hardhat help
-npx hardhat test
-GAS_REPORT=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
+    Why the project is useful
+This project is for anyone looking for talent for blockchain developing on Solidity, Javascript and React.
+
+    How users can get started with the project
+User needs a MetaMask wallet on his/her browser and some testnet Ether to access all functionality of the project.
+
+    Where users can get help with your project
+A user can contact the creator via email lasse.juusela@gmail.com
+
+    Who maintains and contributes to the project
+Lasse Juusela
+https://www.lassejuusela.com
+lasse.juusela@gmail.com
