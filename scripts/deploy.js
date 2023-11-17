@@ -7,16 +7,29 @@
 const hre = require("hardhat");
 
 async function main() {
-  const NAME = 'Dapp University'
-  const SYMBOL = 'DAPP'
+  const NAME = 'LassePunks'
+  const SYMBOL = 'LP'
   const MAX_SUPPLY = '1000000'
+  const BASE_URI = "ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry"
 
-  // Deploy Token
-  const Token = await hre.ethers.getContractFactory('Token')
-  let token = await Token.deploy(NAME, SYMBOL, MAX_SUPPLY)
+  // Deploy LassePunks NFT
+  const NFT = await hre.ethers.getContractFactory('NFT')
+  let nft = await NFT.deploy(NAME, SYMBOL, MAX_SUPPLY, BASE_URI)
 
-  await token.deployed()
-  console.log(`Token deployed to: ${token.address}\n`)
+  await nft.deployed()
+  console.log(`LassePunks deployed to: ${nft.address}\n`)
+
+// --------------------------------------------------
+
+  const FEE_PERCENT = '1'
+
+  // Deploy Marketplace
+  const Marketplace = await hre.ethers.getContractFactory('Marketplace')
+  let marketplace = await Marketplace.deploy(FEE_PERCENT)
+
+  await marketplace.deployed()
+  console.log(`Marketplace deployed to: ${marketplace.address}`)
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -1,60 +1,75 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Container } from 'react-bootstrap'
-import { ethers } from 'ethers'
+import { ethers } from 'ethers';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 // Components
 import Navigation from './Navigation';
-import Loading from './Loading';
+import Buy from './Buy';
+import Sell from './Sell';
+import Create from './Create';
+import History from './History';
 
-// ABIs: Import your contract ABIs here
-// import TOKEN_ABI from '../abis/Token.json'
-
-// Config: Import your network config here
-// import config from '../config.json';
+import {
+  loadProvider,
+  loadNetwork,
+  loadAccount,
+  loadNfts,
+  loadMarketplace,
+  loadAllItems,
+  loadBalances
+} from '../store/interactions';
 
 function App() {
-  const [account, setAccount] = useState(null)
-  const [balance, setBalance] = useState(0)
-
-  const [isLoading, setIsLoading] = useState(true)
+  const dispatch = useDispatch()
+  const account = useSelector(state => state.provider.account)
 
   const loadBlockchainData = async () => {
     // Initiate provider
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const provider = await loadProvider(dispatch)
 
-    // Fetch accounts
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
-    const account = ethers.utils.getAddress(accounts[0])
-    setAccount(account)
+    // Fetch current network's chainId
+    const chainId = await loadNetwork(provider, dispatch)
 
-    // Fetch account balance
-    let balance = await provider.getBalance(account)
-    balance = ethers.utils.formatUnits(balance, 18)
-    setBalance(balance)
+    // Reload page when network changes
+    window.ethereum.on('chainChanged', () => {
+      window.location.reload()
+    })
 
-    setIsLoading(false)
+    // Fetch current account from Metamask when account switched
+    window.ethereum.on('accountsChanged', async () => {
+      const account = await loadAccount(dispatch)
+    })
+
+    // Initiate contracts
+    const nfts = await loadNfts(provider, chainId, dispatch)
+    const marketplace = await loadMarketplace(chainId, provider, dispatch)
+
+    // Load all marketplace items
+    await loadAllItems(provider, marketplace, dispatch)
   }
 
   useEffect(() => {
-    if (isLoading) {
-      loadBlockchainData()
-    }
-  }, [isLoading]);
+    loadBlockchainData()
+  }, []);
 
   return(
     <Container>
-      <Navigation account={account} />
+      <HashRouter>
 
-      <h1 className='my-4 text-center'>React Hardhat Template</h1>
+        <Navigation/>
 
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <>
-          <p className='text-center'><strong>Your ETH Balance:</strong> {balance} ETH</p>
-          <p className='text-center'>Edit App.js to add your code here.</p>
-        </>
-      )}
+        <hr />
+
+        <Routes>
+          <Route exact path="/" element={<Buy />} />
+          <Route path="/sell" element={<Sell />} />
+          <Route path="/create" element={<Create />} />
+          <Route path="/history" element={<History />} />
+        </Routes>
+
+      </HashRouter>
     </Container>
   )
 }
