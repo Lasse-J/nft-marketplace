@@ -1,7 +1,7 @@
 const Sell = () => {
-
-<div>Sell</div>
-
+  return (
+    <div>Sell</div>
+  );
 }
 
 export default Sell;

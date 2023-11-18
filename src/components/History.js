@@ -1,7 +1,7 @@
 const History = () => {
-
-<div>History</div>
-
+  return (
+    <div>History</div>
+  );
 }
 
 export default History;

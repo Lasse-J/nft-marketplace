@@ -1,7 +1,7 @@
 const Create = () => {
-
-<div>Create</div>
-
+  return (
+    <div>Create</div>
+  );
 }
 
 export default Create;

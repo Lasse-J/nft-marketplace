@@ -1,5 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
+
+// Components
+import Tabs from './Tabs';
 
 import { loadAccount, loadBalances } from '../store/interactions';
 
@@ -30,6 +34,11 @@ const Navigation = () => {
       <div className='nav__brand'>
         <h1>Lasse NFT Marketplace</h1>
       </div>
+
+      <div>
+        <Tabs />
+      </div>
+
       { ethBalance ? (
         <div className='nav__balance'>
           {ethBalance.toString().slice(0, 9)} ETH
@@ -37,6 +46,7 @@ const Navigation = () => {
       ) : (
         <div></div>
       )}
+
       <div className='nav__network'>
         <Form.Select
           aria-label="Network Selector"
