@@ -124,7 +124,7 @@ export const loadAllItems = async (provider, marketplace, dispatch) => {
   const items = itemStream.map(event => {
     return { hash: event.transactionHash, args: event.args }
   })
-//  console.log(items)
+  console.log(items)
 
   dispatch(itemsLoaded(items))
 }

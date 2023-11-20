@@ -17,7 +17,7 @@ async function main() {
   let lp = await LassePunks.deploy(NAME, SYMBOL, MAX_SUPPLY, BASE_URI)
 
   await lp.deployed()
-  console.log(`LassePunks deployed to: ${lp.address}\n`)
+  console.log(`LassePunks deployed to: ${lp.address}`)
 
 // --------------------------------------------------
 
@@ -28,8 +28,9 @@ async function main() {
   let marketplace = await Marketplace.deploy(FEE_PERCENT)
 
   await marketplace.deployed()
-  console.log(`Marketplace deployed to: ${marketplace.address}`)
+  console.log(`Marketplace deployed to: ${marketplace.address}\n`)
 
+  console.log('Finished.')
 }
 
 // We recommend this pattern to be able to use async/await everywhere

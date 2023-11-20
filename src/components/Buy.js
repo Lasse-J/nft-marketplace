@@ -17,34 +17,33 @@ const Buy = () => {
   const nfts = useSelector(state => state.nfts.contracts);
   const dispatch = useDispatch();
 
-  // Use the itemSelector to get only active items
-  const activeItems = useSelector(itemSelector);
-
   const isBuying = useSelector(state => state.marketplace.buying.isBuying);
   const isSuccess = useSelector(state => state.marketplace.buying.isSuccess);
   const transactionHash = useSelector(state => state.marketplace.buying.transactionHash);
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(true);
-  
+ 
+  // Use the itemSelector to get only active items
+  const activeItems = useSelector(itemSelector);
+
   // State to hold items with fetched metadata
   const [listedItems, setListedItems] = useState([]);
 
   // Function to fetch metadata for each active item and set state
   const fetchMetadata = async (item) => {
-    const URI = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.tokenId}.json`;
+    const URI = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.args.tokenId}.json`;
     const response = await fetch(URI);
     const metadata = await response.json();
     console.log(metadata)
-    const totalPrice = await marketplace.getTotalPrice(item.tokenId)
-    console.log(item.active)
+    const totalPrice = await marketplace.getTotalPrice(item.args.tokenId);
     return {
       ...item,
-      image: `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${item.tokenId}.png`,
+      image: `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${item.args.tokenId}.png`,
       name: metadata.name,
       description: metadata.description,
-      totalPrice: totalPrice,
-      tokenId: item.tokenId,
-      active: item.active
+      totalPrice: totalPrice.toString(),
+      tokenId: (item.args.tokenId).toString(),
+      active: item.args.active
     };
   };
   
@@ -54,6 +53,7 @@ const Buy = () => {
     const itemsWithMetadata = await Promise.all(activeItems.map(async (item) => {
       return fetchMetadata(item);
     }));
+    console.log('itemsWithMetadata', itemsWithMetadata)
     setListedItems(itemsWithMetadata);
     setLoading(false);
   };
@@ -70,7 +70,7 @@ const Buy = () => {
   useEffect(() => {
     if (provider && marketplace) {
       loadMarketplaceItems();
-      loadAllItems(provider, marketplace, dispatch);
+//      loadAllItems(provider, marketplace, dispatch);
     }
   }, [provider, marketplace]);
   
@@ -91,7 +91,6 @@ const Buy = () => {
                     <Card.Body color="secondary">
                       <Card.Title>{item.name}</Card.Title>
                       <Card.Text>{item.description}</Card.Text>
-                      <Card.Text>ItemId: {item.itemId}</Card.Text>
                       <Card.Text>TokenId: {item.tokenId}</Card.Text>
                       <Card.Text>Active: {item.active.toString()}</Card.Text>
                     </Card.Body>
