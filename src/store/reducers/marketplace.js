@@ -50,7 +50,6 @@ export const marketplaceSlice = createSlice({
       if (index !== -1) {
         state.items[index].args.active = false; // Set the item to inactive after purchase
       }
-      // Update buying state
       state.buying.isBuying = false;
       state.buying.isSuccess = true;
       state.buying.transactionHash = action.payload.transactionHash;

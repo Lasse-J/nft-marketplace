@@ -14,6 +14,7 @@ const Buy = () => {
   const provider = useSelector(state => state.provider.connection);
   const account = useSelector(state => state.provider.account);
   const marketplace = useSelector(state => state.marketplace.contract);
+//  const itemCount = useSelector(state => state.marketplace.itemCount);
   const nfts = useSelector(state => state.nfts.contracts);
   const dispatch = useDispatch();
 
@@ -31,19 +32,18 @@ const Buy = () => {
 
   // Function to fetch metadata for each active item and set state
   const fetchMetadata = async (item) => {
-    const URI = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.args.tokenId}.json`;
+    const URI = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.tokenId}.json`;
     const response = await fetch(URI);
     const metadata = await response.json();
-    console.log(metadata)
-    const totalPrice = await marketplace.getTotalPrice(item.args.tokenId);
+    const totalPrice = await marketplace.getTotalPrice(item.tokenId);
     return {
       ...item,
-      image: `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${item.args.tokenId}.png`,
+      image: `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${item.tokenId}.png`,
       name: metadata.name,
       description: metadata.description,
       totalPrice: totalPrice.toString(),
-      tokenId: (item.args.tokenId).toString(),
-      active: item.args.active
+      tokenId: (item.tokenId).toString(),
+      active: item.active
     };
   };
   
@@ -53,7 +53,6 @@ const Buy = () => {
     const itemsWithMetadata = await Promise.all(activeItems.map(async (item) => {
       return fetchMetadata(item);
     }));
-    console.log('itemsWithMetadata', itemsWithMetadata)
     setListedItems(itemsWithMetadata);
     setLoading(false);
   };

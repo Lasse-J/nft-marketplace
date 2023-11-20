@@ -114,19 +114,43 @@ export const loadBalances = async (nfts, account, dispatch, provider) => {
 // LOAD ALL MARKETPLACE ITEMS
 
 export const loadAllItems = async (provider, marketplace, dispatch) => {
+  console.log('loadAllItems triggered')
   provider = new ethers.providers.Web3Provider(window.ethereum)
-  const block = await provider.getBlockNumber()
+//  const block = await provider.getBlockNumber()
 
   // Fetch all items from Blockchain
   const { chainId } = await provider.getNetwork()
   marketplace = new ethers.Contract(config[chainId].marketplace.address, MARKETPLACE_ABI, provider)
-  const itemStream = await marketplace.queryFilter('ItemEvent', 0, block)
-  const items = itemStream.map(event => {
-    return { hash: event.transactionHash, args: event.args }
-  })
-  console.log(items)
+//  const itemStream = await marketplace.queryFilter('ItemEvent', 0, block)
+//  const items = itemStream.map(event => {
+//    return { hash: event.transactionHash, args: event.args }
+//  })
+//  console.log(items)
 
-  dispatch(itemsLoaded(items))
+//  dispatch(itemsLoaded(items))
+
+  const itemCount = await marketplace.itemCount();
+
+  const itemsPromises = [];
+    for (let i = 1; i <= itemCount; i++) {
+      itemsPromises.push(marketplace.items(i));
+    }
+
+  const allItems = await Promise.all(itemsPromises);
+  console.log('allItems', allItems)
+  const activeItems = allItems.filter(item => item.active);
+  console.log('activeItems', activeItems)
+
+  dispatch(itemsLoaded(activeItems.map((item, index) => ({
+    itemId: index + 1, // Assuming item IDs start at 1
+    nftAddress: item.nft,
+    tokenId: item.tokenId.toString(),
+    price: item.price.toString(),
+    seller: item.seller,
+    active: item.active
+  }))));
+
+    console.log('loadAllItems finalized.')
 }
 
 // --------------------
@@ -136,9 +160,9 @@ export const buy = async (provider, marketplace, item, totalPrice, dispatch) => 
   try {
     dispatch(buyRequest());
     const signer = provider.getSigner();
-    let transaction = await marketplace.connect(signer).buyItem(item.itemId, { value: ethers.utils.parseEther(totalPrice.toString()) });
+    let transaction = await marketplace.connect(signer).buyItem(item.tokenId, { value: ethers.utils.parseEther(totalPrice.toString()) });
     await transaction.wait();
-    dispatch(buyItemSuccess({ itemId: item.itemId, transactionHash: transaction.hash })); // Dispatch the buyItemSuccess action
+    dispatch(buyItemSuccess({ itemId: item.tokenId, transactionHash: transaction.hash })); // Dispatch the buyItemSuccess action
     dispatch(buySuccess(transaction.hash));
   } catch (error) {
     dispatch(buyFail());
