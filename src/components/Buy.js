@@ -7,6 +7,7 @@ import { itemSelector } from '../store/selectors';
 // Components
 import Loading from './Loading';
 import Alert from './Alert';
+
 import { loadBalances, loadAllItems, buy } from '../store/interactions';
 
 const Buy = () => {
@@ -18,12 +19,15 @@ const Buy = () => {
 
   // Use the itemSelector to get only active items
   const activeItems = useSelector(itemSelector);
+
   const isBuying = useSelector(state => state.marketplace.buying.isBuying);
   const isSuccess = useSelector(state => state.marketplace.buying.isSuccess);
   const transactionHash = useSelector(state => state.marketplace.buying.transactionHash);
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [listedItems, setListedItems] = useState([]); // State to hold items with fetched metadata
+  
+  // State to hold items with fetched metadata
+  const [listedItems, setListedItems] = useState([]);
 
   // Function to fetch metadata for each active item and set state
   const fetchMetadata = async (item) => {

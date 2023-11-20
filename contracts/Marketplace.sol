@@ -64,6 +64,7 @@ contract Marketplace is ReentrancyGuard, Ownable {
 		
 		// Price can't be zero or negative
 		require(_price > 0, 'Price must be greater than 0');
+		require(_nft.ownerOf(_tokenId) == msg.sender, 'Only the owner of NFT can list');
 
 		// Adds new item to the itemCount state
 		itemCount++;
@@ -143,9 +144,9 @@ contract Marketplace is ReentrancyGuard, Ownable {
 		return(items[_itemId].price*(100 + feePercent)/100);
 	}
 
-//	function getActiveBool(uint256 _itemId) view public returns(bool) {
-//		// Get active boolean of item from the mapping
-//		return(items[_itemId].active);
-//	}
+	function getActiveBool(uint256 _itemId) view public returns(bool) {
+		// Get active boolean of item from the mapping
+		return(items[_itemId].active);
+	}
 
 }

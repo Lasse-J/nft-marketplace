@@ -9,15 +9,15 @@ const hre = require("hardhat");
 async function main() {
   const NAME = 'LassePunks'
   const SYMBOL = 'LP'
-  const MAX_SUPPLY = '1000000'
+  const MAX_SUPPLY = '99'
   const BASE_URI = "ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry"
 
   // Deploy LassePunks NFT
-  const NFT = await hre.ethers.getContractFactory('NFT')
-  let nft = await NFT.deploy(NAME, SYMBOL, MAX_SUPPLY, BASE_URI)
+  const LassePunks = await hre.ethers.getContractFactory('NFT')
+  let lp = await LassePunks.deploy(NAME, SYMBOL, MAX_SUPPLY, BASE_URI)
 
-  await nft.deployed()
-  console.log(`LassePunks deployed to: ${nft.address}\n`)
+  await lp.deployed()
+  console.log(`LassePunks deployed to: ${lp.address}\n`)
 
 // --------------------------------------------------
 
