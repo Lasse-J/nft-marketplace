@@ -7,7 +7,7 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 // Components
 import Navigation from './Navigation';
 import Buy from './Buy';
-import Sell from './Sell';
+import List from './List';
 import Create from './Create';
 import History from './History';
 
@@ -64,7 +64,7 @@ function App() {
 
         <Routes>
           <Route exact path="/" element={<Buy />} />
-          <Route path="/sell" element={<Sell />} />
+          <Route path="/list" element={<List />} />
           <Route path="/create" element={<Create />} />
           <Route path="/history" element={<History />} />
         </Routes>

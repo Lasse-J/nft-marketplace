@@ -88,10 +88,8 @@ const Buy = () => {
                   <Card>
                     <Card.Img variant="top" src={item.image} />
                     <Card.Body color="secondary">
-                      <Card.Title>{item.name}</Card.Title>
-                      <Card.Text>{item.description}</Card.Text>
-                      <Card.Text>TokenId: {item.tokenId}</Card.Text>
-                      <Card.Text>Active: {item.active.toString()}</Card.Text>
+                      <Card.Title>{item.name} {item.description}</Card.Title>
+                      <Card.Text></Card.Text>
                     </Card.Body>
                     <Card.Footer>
                       <div className='d-grid'>

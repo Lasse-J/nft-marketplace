@@ -7,8 +7,8 @@ const Tabs = () => {
         <LinkContainer to="/">
           <Nav.Link>Buy</Nav.Link>
         </LinkContainer>
-        <LinkContainer to="/sell">
-          <Nav.Link>Sell</Nav.Link>
+        <LinkContainer to="/list">
+          <Nav.Link>List</Nav.Link>
         </LinkContainer>
         <LinkContainer to="/create">
           <Nav.Link>Create</Nav.Link>
