@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { NFTStorage, File } from 'nft.storage';
+import { pack } from 'ipfs-car/pack';
 import { Buffer } from 'buffer';
 import { ethers } from 'ethers';
 import axios from 'axios';
@@ -10,11 +11,15 @@ import Spinner from 'react-bootstrap/Spinner';
 const Create = () => {
   const provider = useSelector(state => state.provider.connection);
   const nfts = useSelector(state => state.nfts.contracts);
+  const tokenCount = useSelector(state => state.nfts.tokenCount[1]);
+  const marketplace = useSelector(state => state.marketplace.contract);
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [image, setImage] = useState(null)
-  const [url, setURL] = useState(null)
+  const [aiURL, setAiURL] = useState(null)
+  const [aiBaseURI, setAiBaseURI] = useState(null)
+  const [current_AI_CID, setCurrent_AI_CID] = useState(null)
 
   const [message, setMessage] = useState('')
   const [isWaiting, setIsWaiting] = useState(false)
@@ -36,7 +41,17 @@ const Create = () => {
     const url = await uploadImage(imageData)
 
     // Mint NFT
-    await mintImage(url)
+//    await mintImage(aiBaseURI)
+
+    // List NFT to Marketplace
+    const signer = await provider.getSigner()
+    let price = 1
+    const tokenId = `${tokenCount}`
+    console.log('tokenId', tokenId)
+    let transaction = await nfts[1].connect(signer).setApprovalForAll(marketplace.address, true)
+    transaction.wait()
+    transaction = await marketplace.connect(signer).createItem(nfts[1].address, tokenId, price)
+    transaction.wait()
 
     setIsWaiting(false)
     setMessage("")
@@ -81,32 +96,47 @@ const Create = () => {
 
     // Send request to store image
     const { ipnft } = await nftstorage.store({
-      image: new File([imageData], "image.jpeg", { type: "image/jpeg" }),
+      image: new File([imageData], `${tokenCount}.jpeg`, { type: "image/jpeg" }),
       name: name,
       description: description,
+      tokenId: `${tokenCount}`
     })
 
     // Save the URL that comes back
     const url = `https://ipfs.io/ipfs/${ipnft}/metadata.json`
-    setURL(url)
+    setAiURL(url)
+    console.log('url', url)
+    console.log('aiURL', aiURL)
 
-    return url
-  }
+    // Construct and save the aiBaseURI
+    const aiBaseURI = `ipfs://${ipnft}/`
+    setAiBaseURI(aiBaseURI)
+//  }
 
-  const mintImage = async (tokenURI) => {
+//  const mintImage = async (ipnft) => {
     setMessage("Waiting for Mint...")
 
+    console.log('aiBaseURI', aiBaseURI)
+    console.log('tokenId', `${tokenCount}`)
+    const tokenId = `${tokenCount}`
     const signer = await provider.getSigner()
-    const transaction = await nfts[0].connect(signer).mint(tokenURI)
+    const transaction = await nfts[1].connect(signer).mint(`${aiBaseURI}/${tokenCount}`)
     await transaction.wait()
+
+    const aiTokenURI = await nfts[1].aiTokenURI(aiBaseURI, tokenId)
+    console.log('aiTokenURI', aiTokenURI)
+
+    const current_AI_CID = `${aiBaseURI.slice(7, 66)}`
+    console.log('current_AI_CID', current_AI_CID)
+    setCurrent_AI_CID(current_AI_CID)
   }
 
   return (
     <div>
       <div className="form">
         <form onSubmit={submitHandler}>
-          <input type="text" placeholder="type in a name..." onChange={(e) => {setName(e.target.value)}}></input>
-          <input type="text" placeholder="type in a description..." onChange={(e) => {setDescription(e.target.value)}}></input>
+          <input type="text" placeholder="Name..." onChange={(e) => {setName(e.target.value)}}></input>
+          <input type="text" placeholder="Description..." onChange={(e) => {setDescription(e.target.value)}}></input>
           <input type="submit" value="Create & Mint"></input>
         </form>
         <div className="image">
@@ -122,9 +152,10 @@ const Create = () => {
           )}
         </div>
       </div>
-      { !isWaiting && url && (
-        <p>View&nbsp;<a href={url} target="_blank" rel="noreferrer">Metadata</a></p>
+      { !isWaiting && aiURL && (
+        <p>View&nbsp;<a href={aiURL} target="_blank" rel="noreferrer">Metadata</a></p>
       )}
+      <p>{current_AI_CID}</p>
     </div>
   );
 }

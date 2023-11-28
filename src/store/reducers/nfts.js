@@ -5,9 +5,9 @@ export const nfts = createSlice({
   initialState: {
     contracts: [],
     symbols: [],
-    maxSupply: [0],
+    maxSupply: [],
     baseURI: [],
-    tokenCount: [0],
+    tokenCount: [0, 0],
     nftBalances: [0]
   },
   reducers: {
@@ -25,7 +25,7 @@ export const nfts = createSlice({
     },
     setTokenCount: (state, action) => {
       state.tokenCount = action.payload
-    },
+    },   
     setNftBalances: (state, action) => {
       state.nftBalances = action.payload
     }

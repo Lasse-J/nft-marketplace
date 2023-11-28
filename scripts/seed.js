@@ -54,7 +54,35 @@ async function main() {
 
   transaction = await lp.connect(minter2).mint('ipfs://${process.env.REACT_APP_IPFS_METADATA_CID}/6.json')
   await transaction.wait()
-  console.log(`Minter #2: Minted 6 of 99 LassePunks \n`)
+  console.log(`Minter #2: Minted 6 of 99 LassePunks`)
+
+  transaction = await lp.connect(minter2).mint('ipfs://${process.env.REACT_APP_IPFS_METADATA_CID}/7.json')
+  await transaction.wait()
+  console.log(`Minter #2: Minted 7 of 99 LassePunks`)
+
+  transaction = await lp.connect(minter2).mint('ipfs://${process.env.REACT_APP_IPFS_METADATA_CID}/8.json')
+  await transaction.wait()
+  console.log(`Minter #2: Minted 8 of 99 LassePunks`)
+
+  transaction = await lp.connect(minter2).mint('ipfs://${process.env.REACT_APP_IPFS_METADATA_CID}/9.json')
+  await transaction.wait()
+  console.log(`Minter #2: Minted 9 of 99 LassePunks`)
+
+  transaction = await lp.connect(minter2).mint('ipfs://${process.env.REACT_APP_IPFS_METADATA_CID}/10.json')
+  await transaction.wait()
+  console.log(`Minter #2: Minted 10 of 99 LassePunks`)
+
+  transaction = await lp.connect(minter2).mint('ipfs://${process.env.REACT_APP_IPFS_METADATA_CID}/11.json')
+  await transaction.wait()
+  console.log(`Minter #2: Minted 11 of 99 LassePunks`)
+
+  transaction = await lp.connect(minter2).mint('ipfs://${process.env.REACT_APP_IPFS_METADATA_CID}/12.json')
+  await transaction.wait()
+  console.log(`Minter #2: Minted 12 of 99 LassePunks`)
+
+  transaction = await lp.connect(minter2).mint('ipfs://${process.env.REACT_APP_IPFS_METADATA_CID}/13.json')
+  await transaction.wait()
+  console.log(`Minter #2: Minted 13 of 99 LassePunks \n`)
 
   // Fetch Marketplace
   console.log(`Fetching Marketplace...`)

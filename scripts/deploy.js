@@ -10,7 +10,7 @@ async function main() {
   const NAME = 'LassePunks'
   const SYMBOL = 'LP'
   const MAX_SUPPLY = '99'
-  const BASE_URI = "ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry"
+  const BASE_URI = "ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry/"
 
   // Deploy LassePunks NFT
   const LassePunks = await hre.ethers.getContractFactory('NFT')
@@ -18,6 +18,20 @@ async function main() {
 
   await lp.deployed()
   console.log(`LassePunks deployed to: ${lp.address}`)
+
+// --------------------------------------------------
+
+  const NAMEAI = 'Lasse AI Generated NFT'
+  const SYMBOLAI = 'LAIN'
+  const MAX_SUPPLYAI = '999999'
+  const BASE_URIAI = ''
+
+  // Deploy Lasse AI Generated NFT
+  const AINFT = await hre.ethers.getContractFactory('NFT')
+  let ainft = await AINFT.deploy(NAMEAI, SYMBOLAI, MAX_SUPPLYAI, BASE_URIAI)
+
+  await ainft.deployed()
+  console.log(`Lasse AI Generated NFT deployed to: ${ainft.address}`)
 
 // --------------------------------------------------
 

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 import { Card, Button, Row, Col, Spinner } from 'react-bootstrap';
 import { itemSelector } from '../store/selectors';
+import config from '../config.json'
 
 // Components
 import Loading from './Loading';
@@ -12,6 +13,7 @@ import { loadBalances, loadAllItems, buy } from '../store/interactions';
 
 const Buy = () => {
   const provider = useSelector(state => state.provider.connection);
+  const chainId = useSelector(state => state.provider.chainId);
   const account = useSelector(state => state.provider.account);
   const marketplace = useSelector(state => state.marketplace.contract);
 //  const itemCount = useSelector(state => state.marketplace.itemCount);
@@ -32,7 +34,15 @@ const Buy = () => {
 
   // Function to fetch metadata for each active item and set state
   const fetchMetadata = async (item) => {
-    const URI = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.tokenId}.json`;
+    let URI
+//    {item.nftAddress == config[chainId].nft.address ? 
+      URI = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.tokenId}.json`
+//      :
+//      URI = `https://${current_AI_CID}/${item.tokenId}.json`
+//    }
+    console.log('item.nftAddress', item.nftAddress)
+    console.log('config[chainId].nft.address', config[chainId].nft.address)
+//    const URI = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.tokenId}.json`;
     const response = await fetch(URI);
     const metadata = await response.json();
     const totalPrice = await marketplace.getTotalPrice(item.tokenId);
@@ -79,67 +89,65 @@ const Buy = () => {
   
   return (
     <div className="flex justify-content-center">
-      <Card style={{ maxWidth: '1200px' }} className='mx-auto px-4'>
-        {listedItems.length > 0 ? (
-          <div className="px-5 container">
-            <Row xs={1} md={2} lg={4} className="g-4 py-5">
-              {listedItems.map((item, index) => (
-                <Col key={index} className="overflow-hidden">
-                  <Card>
-                    <Card.Img variant="top" src={item.image} />
-                    <Card.Body color="secondary">
-                      <Card.Title>{item.name} {item.description}</Card.Title>
-                      <Card.Text></Card.Text>
-                    </Card.Body>
-                    <Card.Footer>
-                      <div className='d-grid'>
-                        {isBuying ? (
-                          <Spinner animation="border" />
-                        ) : (
-                          <Button onClick={() => buyMarketItem(item)} variant="primary" size="lg">
-                             Buy for {ethers.utils.formatUnits(item.totalPrice, 'ether')} ETH
-                          </Button>
-                        )}
-                      </div>
-                    </Card.Footer>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          </div>
-        ) : (
-          <div className="px-5 container">
-            <p className='d-flex justify-content-center align-items-center' style={{ height: '300px' }}>
-              {account ? 'No listed NFTs.' : 'Please connect your wallet.'}
-            </p>
-          </div>
-        )}
-      </Card>
+      {listedItems.length > 0 ? (
+        <div className="px-5 container">
+          <Row xs={1} md={2} lg={4} className="g-4 py-5">
+            {listedItems.map((item, index) => (
+              <Col key={index} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top" src={item.image} />
+                  <Card.Body color="secondary">
+                    <Card.Title>{item.description} {item.name}</Card.Title>
+                    <Card.Text></Card.Text>
+                  </Card.Body>
+                  <Card.Footer>
+                    <div className='d-grid'>
+                      {isBuying ? (
+                        <Spinner animation="border" />
+                      ) : (
+                        <Button onClick={() => buyMarketItem(item)} variant="primary" size="lg">
+                           Buy for {ethers.utils.formatUnits(item.totalPrice, 'ether')} ETH
+                        </Button>
+                      )}
+                    </div>
+                  </Card.Footer>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
+      ) : (
+        <div className="px-5 container">
+          <p className='d-flex justify-content-center align-items-center' style={{ height: '300px' }}>
+            {account ? 'No listed NFTs.' : 'Please connect your wallet.'}
+          </p>
+        </div>
+      )}
 
-        { isBuying ? (
-          <Alert
-            message={'Buy Pending...'}
-            transactionHash={null}
-            variant={'info'}
-            setShowAlert={setShowAlert}
-          />
-        ) : isSuccess && showAlert ? (
-          <Alert
-            message={'Buy Successful'}
-            transactionHash={transactionHash}
-            variant={'success'}
-            setShowAlert={setShowAlert}
-          />
-        ) : !isSuccess && showAlert ? (
-          <Alert
-            message={'Buy Failed'}
-            transactionHash={null}
-            variant={'danger'}
-            setShowAlert={setShowAlert}
-          />
-        ) : (
-          <></>
-        )}
+      { isBuying ? (
+        <Alert
+          message={'Buy Pending...'}
+          transactionHash={null}
+          variant={'info'}
+          setShowAlert={setShowAlert}
+        />
+      ) : isSuccess && showAlert ? (
+        <Alert
+          message={'Buy Successful'}
+          transactionHash={transactionHash}
+          variant={'success'}
+          setShowAlert={setShowAlert}
+        />
+      ) : !isSuccess && showAlert ? (
+        <Alert
+          message={'Buy Failed'}
+          transactionHash={null}
+          variant={'danger'}
+          setShowAlert={setShowAlert}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

@@ -126,14 +126,26 @@ form input[type="text"] {
   margin: 10px 0;
   padding: 10px;
 
-  border: 1px solid var(--clr-blue);
+  border: 1px solid var(--clr-green);
+  border-radius: 4px;
+
+  font-size: 1.10em;
+}
+
+form input[type="number"] {
+  width: 250px;
+  height: 50px;
+  margin: 10px 0;
+  padding: 10px;
+
+  border: 1px solid var(--clr-green);
   border-radius: 4px;
 
   font-size: 1.10em;
 }
 
 form input[type="submit"] {
-  background-color: var(--clr-blue);
+  background-color: var(--clr-green);
   color: var(--clr-white);
 
   width: 250px;
@@ -153,7 +165,7 @@ form input[type="submit"] {
 }
 
 form input[type="submit"]:hover {
-  background-color: var(--clr-blue-2);
+  background-color: var(--clr-green);
 }
 
 /* ------------------------------------------------------ */
@@ -168,7 +180,7 @@ form input[type="submit"]:hover {
   width: 512px;
   height: 512px;
   margin: 0 25px;
-  border: 3px solid var(--clr-blue);
+  border: 3px solid var(--clr-green);
   border-radius: 4px;
 
   overflow: hidden;

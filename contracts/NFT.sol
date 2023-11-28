@@ -22,6 +22,7 @@ contract NFT is ERC721URIStorage, Ownable {
 	string public baseURI;
     string public baseExtension = ".json";
 	uint256 public tokenCount;
+//	uint256 public aiTokenCount;
 
 	constructor(
 		string memory _name,
@@ -40,7 +41,14 @@ contract NFT is ERC721URIStorage, Ownable {
 		return(tokenCount);
 	}
 
-	// Return metadata IPFS uri
+//	function mintAI(string memory _tokenURI) external returns(uint256) {
+//		aiTokenCount ++;
+//		_safeMint(msg.sender, aiTokenCount);
+//		_setTokenURI(aiTokenCount, _tokenURI);
+//		return(aiTokenCount);
+//	}
+
+	// Return metadata IPFS URI
     // EG: 'ipfs://QmQ2jnDYecFhrf3asEWjyjZRX1pZSsNWG3qHzmNDvXa9qg/1.json'
     function tokenURI(uint256 _tokenId) 
         public
@@ -51,5 +59,16 @@ contract NFT is ERC721URIStorage, Ownable {
     {
         require(_exists(_tokenId), 'token does not exist');
 		return(string(abi.encodePacked(baseURI, _tokenId.toString(), baseExtension)));
+    }
+
+	// Return metadata IPFS URI for AI generated NFTs
+    function aiTokenURI(string memory aiBaseURI, uint256 _tokenId)
+    	public
+    	view
+    	virtual
+    	returns(string memory)
+    {
+    	require(_exists(_tokenId), 'ai token does not exist');
+    	return(string(abi.encodePacked(aiBaseURI, _tokenId.toString(), baseExtension)));
     }
 }

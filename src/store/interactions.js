@@ -53,7 +53,6 @@ export const loadAccount = async (dispatch) => {
   const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
   const account = ethers.utils.getAddress(accounts[0])
   dispatch(setAccount(account))
-  console.log('loadAccountin account', account)
 
   return account
 }
@@ -63,17 +62,26 @@ export const loadAccount = async (dispatch) => {
 
 export const loadNfts = async (provider, chainId, dispatch) => {
   const nft = new ethers.Contract(config[chainId].nft.address, NFT_ABI, provider)
+  const ainft = new ethers.Contract(config[chainId].ainft.address, NFT_ABI, provider)
 
-  dispatch(setContracts([nft]))
-  dispatch(setSymbols([await nft.symbol()]))
+  dispatch(setContracts([nft, ainft]))
+  dispatch(setSymbols([await nft.symbol(), await ainft.symbol()]))
 
   const maxSupply = await nft.maxSupply()
-  dispatch(setMaxSupply([ethers.utils.formatUnits(maxSupply.toString(), '0')]))
+  const maxSupplyAi = await ainft.maxSupply()
+  dispatch(setMaxSupply(
+    [ethers.utils.formatUnits(maxSupply.toString(), '0'),
+     ethers.utils.formatUnits(maxSupplyAi.toString(), '0')]))
 
-  dispatch(setBaseURI([await nft.baseURI()]))
+  dispatch(setBaseURI(
+    [await nft.baseURI(), 
+     await ainft.baseURI()]))
 
   const tokenCount = await nft.tokenCount()
-  dispatch(setTokenCount([ethers.utils.formatUnits(tokenCount.toString(), '0')]))
+  const tokenCountAi = await ainft.tokenCount()
+  dispatch(setTokenCount(
+    [ethers.utils.formatUnits(tokenCount.toString(), '0'),
+     ethers.utils.formatUnits(tokenCountAi.toString(), '0')]))
 }
 
 export const loadMarketplace = async (chainId, provider, dispatch) => {
@@ -95,19 +103,12 @@ export const loadMarketplace = async (chainId, provider, dispatch) => {
 // LOAD BALANCES
 
 export const loadBalances = async (nfts, account, dispatch, provider) => {
-  console.log('trying to load NFT balances')
-  console.log('nfts', nfts)
-  console.log('account', account)
-  console.log('provider', provider)
-
   const nftBalances = await nfts[0].balanceOf(account)
-  dispatch(setNftBalances([nftBalances]))
-  console.log('nftBalances loaded')
+  const nftBalancesAi = await nfts[1].balanceOf(account)
+  dispatch(setNftBalances([nftBalances, nftBalancesAi]))
 
-  console.log('trying to load ETH balance')
   const ethBalance = await provider.getBalance(account)
   dispatch(setEthBalance(ethers.utils.formatUnits(ethBalance.toString(), 'ether')))
-  console.log('ethBalance loaded')
 }
 
 // --------------------------
