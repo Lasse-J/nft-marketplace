@@ -62,26 +62,20 @@ export const loadAccount = async (dispatch) => {
 
 export const loadNfts = async (provider, chainId, dispatch) => {
   const nft = new ethers.Contract(config[chainId].nft.address, NFT_ABI, provider)
-  const ainft = new ethers.Contract(config[chainId].ainft.address, NFT_ABI, provider)
 
-  dispatch(setContracts([nft, ainft]))
-  dispatch(setSymbols([await nft.symbol(), await ainft.symbol()]))
+  dispatch(setContracts([nft]))
+  dispatch(setSymbols([await nft.symbol()]))
 
   const maxSupply = await nft.maxSupply()
-  const maxSupplyAi = await ainft.maxSupply()
   dispatch(setMaxSupply(
-    [ethers.utils.formatUnits(maxSupply.toString(), '0'),
-     ethers.utils.formatUnits(maxSupplyAi.toString(), '0')]))
+    [ethers.utils.formatUnits(maxSupply.toString(), '0')]))
 
   dispatch(setBaseURI(
-    [await nft.baseURI(), 
-     await ainft.baseURI()]))
+    [await nft.baseURI()]))
 
   const tokenCount = await nft.tokenCount()
-  const tokenCountAi = await ainft.tokenCount()
   dispatch(setTokenCount(
-    [ethers.utils.formatUnits(tokenCount.toString(), '0'),
-     ethers.utils.formatUnits(tokenCountAi.toString(), '0')]))
+    [ethers.utils.formatUnits(tokenCount.toString(), '0')]))
 }
 
 export const loadMarketplace = async (chainId, provider, dispatch) => {
@@ -104,8 +98,7 @@ export const loadMarketplace = async (chainId, provider, dispatch) => {
 
 export const loadBalances = async (nfts, account, dispatch, provider) => {
   const nftBalances = await nfts[0].balanceOf(account)
-  const nftBalancesAi = await nfts[1].balanceOf(account)
-  dispatch(setNftBalances([nftBalances, nftBalancesAi]))
+  dispatch(setNftBalances([nftBalances.toString()]))
 
   const ethBalance = await provider.getBalance(account)
   dispatch(setEthBalance(ethers.utils.formatUnits(ethBalance.toString(), 'ether')))
@@ -115,20 +108,12 @@ export const loadBalances = async (nfts, account, dispatch, provider) => {
 // LOAD ALL MARKETPLACE ITEMS
 
 export const loadAllItems = async (provider, marketplace, dispatch) => {
-  console.log('loadAllItems triggered')
+//  console.log('loadAllItems triggered')
   provider = new ethers.providers.Web3Provider(window.ethereum)
-//  const block = await provider.getBlockNumber()
 
   // Fetch all items from Blockchain
   const { chainId } = await provider.getNetwork()
   marketplace = new ethers.Contract(config[chainId].marketplace.address, MARKETPLACE_ABI, provider)
-//  const itemStream = await marketplace.queryFilter('ItemEvent', 0, block)
-//  const items = itemStream.map(event => {
-//    return { hash: event.transactionHash, args: event.args }
-//  })
-//  console.log(items)
-
-//  dispatch(itemsLoaded(items))
 
   const itemCount = await marketplace.itemCount();
 
@@ -138,9 +123,9 @@ export const loadAllItems = async (provider, marketplace, dispatch) => {
     }
 
   const allItems = await Promise.all(itemsPromises);
-  console.log('allItems', allItems)
+//  console.log('allItems', allItems)
   const activeItems = allItems.filter(item => item.active);
-  console.log('activeItems', activeItems)
+//  console.log('activeItems', activeItems)
 
   dispatch(itemsLoaded(activeItems.map((item, index) => ({
     itemId: index + 1, // Assuming item IDs start at 1
@@ -151,7 +136,7 @@ export const loadAllItems = async (provider, marketplace, dispatch) => {
     active: item.active
   }))));
 
-    console.log('loadAllItems finalized.')
+  console.log('loadAllItems finalized.')
 }
 
 // --------------------

@@ -154,30 +154,6 @@
   {
     "inputs": [
       {
-        "internalType": "string",
-        "name": "aiBaseURI",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "aiTokenURI",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "to",
         "type": "address"

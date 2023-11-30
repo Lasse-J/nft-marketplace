@@ -8,7 +8,8 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 import Navigation from './Navigation';
 import Buy from './Buy';
 import List from './List';
-import Create from './Create';
+// import Create from './Create';
+import Mint from './Mint';
 import History from './History';
 
 import {
@@ -65,7 +66,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Buy />} />
           <Route path="/list" element={<List />} />
-          <Route path="/create" element={<Create />} />
+          <Route path="/mint" element={<Mint />} />
           <Route path="/history" element={<History />} />
         </Routes>
 

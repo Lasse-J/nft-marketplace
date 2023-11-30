@@ -6,7 +6,6 @@ const tokens = (n) => {
 }
 
 const ether = tokens
-const nfts = ether
 
 const provider = ethers.getDefaultProvider();
 
@@ -25,15 +24,11 @@ describe('Marketplace', () => {
     deployer = accounts[0]
     user1 = accounts[1]
     user2 = accounts[2]
-    feePercent = 1
+    feePercent = 2
 
     // Deploy LassePunks NFT collection
     const NFT = await ethers.getContractFactory('NFT')
     lp = await NFT.deploy('LassePunks', 'LP', 99, 'ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry')
-
-    // Deploy AI Generated NFT collection
-    const AINFT = await ethers.getContractFactory('NFT')
-    ainft = await AINFT.deploy('AINFT', 'AINFT', 999999, 'ipfs://ainft')
 
     // Deploy NFT Marketplace
     const Marketplace = await ethers.getContractFactory('Marketplace')

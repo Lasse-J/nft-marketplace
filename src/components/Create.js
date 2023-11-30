@@ -135,8 +135,8 @@ const Create = () => {
     <div>
       <div className="form">
         <form onSubmit={submitHandler}>
-          <input type="text" placeholder="Name..." onChange={(e) => {setName(e.target.value)}}></input>
-          <input type="text" placeholder="Description..." onChange={(e) => {setDescription(e.target.value)}}></input>
+          <input type="text" placeholder="Name the nft..." onChange={(e) => {setName(e.target.value)}}></input>
+          <input type="text" placeholder="Describe the image..." onChange={(e) => {setDescription(e.target.value)}}></input>
           <input type="submit" value="Create & Mint"></input>
         </form>
         <div className="image">

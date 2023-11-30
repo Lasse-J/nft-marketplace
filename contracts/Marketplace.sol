@@ -95,11 +95,11 @@ contract Marketplace is ReentrancyGuard, Ownable {
 
 	function buyItem(uint256 _itemId) external payable nonReentrant {
 
-		// Calculate total price
-		uint256 _totalPrice = getTotalPrice(_itemId);
-
 		// Fetch item from items mapping
 		Item storage item = items[_itemId];
+
+		// Calculate total price
+		uint256 _totalPrice = getTotalPrice(item.itemId); // dont use itemId
 
 		// Requirements for buying
 		require(_itemId > 0 && _itemId <= itemCount, 'Item does not exist');
@@ -140,12 +140,10 @@ contract Marketplace is ReentrancyGuard, Ownable {
 	}
 
 	function getTotalPrice(uint256 _itemId) view public returns(uint256) {
-		// Get price of item from the mapping
 		return(items[_itemId].price*(100 + feePercent)/100);
 	}
 
 	function getActiveBool(uint256 _itemId) view public returns(bool) {
-		// Get active boolean of item from the mapping
 		return(items[_itemId].active);
 	}
 

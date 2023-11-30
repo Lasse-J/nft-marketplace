@@ -21,21 +21,21 @@ async function main() {
 
 // --------------------------------------------------
 
-  const NAMEAI = 'Lasse AI Generated NFT'
-  const SYMBOLAI = 'LAIN'
-  const MAX_SUPPLYAI = '999999'
-  const BASE_URIAI = ''
+//  const NAMEAI = 'Lasse AI Generated NFT'
+//  const SYMBOLAI = 'LAIN'
+//  const MAX_SUPPLYAI = '999999'
+//  const BASE_URIAI = ''
 
   // Deploy Lasse AI Generated NFT
-  const AINFT = await hre.ethers.getContractFactory('NFT')
-  let ainft = await AINFT.deploy(NAMEAI, SYMBOLAI, MAX_SUPPLYAI, BASE_URIAI)
+//  const AINFT = await hre.ethers.getContractFactory('NFT')
+//  let ainft = await AINFT.deploy(NAMEAI, SYMBOLAI, MAX_SUPPLYAI, BASE_URIAI)
 
-  await ainft.deployed()
-  console.log(`Lasse AI Generated NFT deployed to: ${ainft.address}`)
+//  await ainft.deployed()
+//  console.log(`Lasse AI Generated NFT deployed to: ${ainft.address}`)
 
 // --------------------------------------------------
 
-  const FEE_PERCENT = '1'
+  const FEE_PERCENT = '2'
 
   // Deploy Marketplace
   const Marketplace = await hre.ethers.getContractFactory('Marketplace')

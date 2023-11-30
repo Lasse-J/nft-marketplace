@@ -20,12 +20,12 @@ const List = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
 
-    if (address === "" || tokenId === "" || price === "") {
+    if (address == "" || tokenId == "" || price == "") {
       window.alert("Please provide a nft smart contract address, tokenId and price in ETH")
       return
     }
 
-    if (address != "" && tokenId != "") {
+    if (address !== "" && tokenId !== "") {
       setMessage("Loading image...")
           
     }
@@ -33,23 +33,27 @@ const List = () => {
     setIsWaiting(true)
 
     // Create marketplace item
-    const signer = await provider.getSigner()
-    let transaction = await nfts[0].connect(signer).approve(marketplace.address, tokenId)
-//    let transaction = await nfts[1].connect(signer).setApprovalForAll(marketplace.address, true)
-    await transaction.wait()
-    transaction = await marketplace.connect(signer).createItem(address, tokenId, price)
-    transaction.wait()
+    try {
+      const signer = await provider.getSigner()
+      let transaction = await nfts[0].connect(signer).approve(marketplace.address, tokenId)
+      await transaction.wait()
+      transaction = await marketplace.connect(signer).createItem(address, tokenId, price)
+      transaction.wait()
+      setMessage("NFT listed to marketplace")
+    } catch {
+      window.alert('Listing failed')
+      setMessage("Please provide NFT address, tokenId and price")
+    }
 
     setIsWaiting(false)
-
-    setMessage("NFT listed to marketplace")
   }
 
   return (
     <div>
       <div className="form">
         <form onSubmit={submitHandler}>
-          <input type="text" placeholder="NFT address..." onChange={(e) => {setAddress(e.target.value)}}></input>
+          <p>0x5FbDB2315678afecb367f032d93F642f64180aa3</p>
+          <input type="text" placeholder="NFT address: 0x..." onChange={(e) => {setAddress(e.target.value)}}></input>
           <input type="number" placeholder="TokenId..." onChange={(e) => {setTokenId(e.target.value)}}></input>
           <input type="number" step=".001" placeholder="Price: 0.000 ETH..." onChange={(e) => {setPrice((ethers.utils.parseUnits(e.target.value)).toString())}}></input>
           <input type="submit" value="List for sale"></input>
