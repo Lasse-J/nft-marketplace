@@ -62,6 +62,8 @@ describe('Marketplace', () => {
       await transaction.wait()
       transaction = await lp.connect(user1).mint('ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry/')
       await transaction.wait()
+      transaction = await lp.connect(user1).mint('ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry/')
+      await transaction.wait()
     })
 
     describe('Success', () => {
@@ -84,11 +86,26 @@ describe('Marketplace', () => {
         expect(await lp.ownerOf(1)).to.equal(marketplace.address)
       })
 
+      it('lists the correct NFT from user to marketplace', async () => {
+        expect(await lp.ownerOf(1)).to.equal(user1.address)
+        expect(await lp.ownerOf(2)).to.equal(user1.address)
+        expect(await lp.ownerOf(3)).to.equal(user1.address)
+        transaction = await lp.connect(user1).setApprovalForAll(marketplace.address, true)
+        await transaction.wait()
+        transaction = await marketplace.connect(user1).createItem(lp.address, 1, ether(1))
+        await transaction.wait()
+        transaction = await marketplace.connect(user1).createItem(lp.address, 3, ether(1))
+        await transaction.wait()
+        expect(await lp.ownerOf(1)).to.equal(marketplace.address)
+        expect(await lp.ownerOf(2)).to.equal(user1.address)
+        expect(await lp.ownerOf(3)).to.equal(marketplace.address)
+      })      
+
       it('emits ItemEvent event', async () => {
         transaction = await lp.connect(user1).setApprovalForAll(marketplace.address, true)
         await transaction.wait()
         await expect(await marketplace.connect(user1).createItem(lp.address, 1, ether(1))).to.emit(marketplace, 'ItemEvent')
-          .withArgs(1, lp.address, 1, ether(1), user1.address, true)
+          .withArgs(1, lp.address, ether(1), user1.address, true)
       })
     })
 
@@ -118,22 +135,26 @@ describe('Marketplace', () => {
       await transaction.wait()
       transaction = await lp.connect(user1).mint('ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry/')
       await transaction.wait()
+      transaction = await lp.connect(user1).mint('ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry/')
+      await transaction.wait()
+      transaction = await lp.connect(user1).mint('ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry/')
+      await transaction.wait()
       transaction = await lp.connect(user1).setApprovalForAll(marketplace.address, true)
       await transaction.wait()
-      transaction = await marketplace.connect(user1).createItem(lp.address, 1, price)
+      transaction = await marketplace.connect(user1).createItem(lp.address, 4, price)
       await transaction.wait()
-      totalPrice = await marketplace.getTotalPrice(1)
+      totalPrice = await marketplace.getTotalPrice(4)
     })
 
     describe('Success', () => {
 
       it('calculates totalPrice', async () => {
-        await expect(await marketplace.getTotalPrice(1)).to.be.greaterThan(price)
+        await expect(await marketplace.getTotalPrice(4)).to.be.greaterThan(price)
       })
 
       it('transfers payment to seller', async () => {
         let balanceBefore = await ethers.provider.getBalance(user1.address)
-        transaction = await marketplace.connect(user2).buyItem(1, { value: totalPrice })
+        transaction = await marketplace.connect(user2).buyItem(4, { value: totalPrice })
         await transaction.wait()
         let balanceAfter = await ethers.provider.getBalance(user1.address)
         expect(balanceAfter).to.be.greaterThan(balanceBefore)
@@ -141,51 +162,41 @@ describe('Marketplace', () => {
 
       it('transfers marketplace fee to feeAccount', async () => {
         balanceBefore = await ethers.provider.getBalance(deployer.address)
-        transaction = await marketplace.connect(user2).buyItem(1, { value: totalPrice })
+        transaction = await marketplace.connect(user2).buyItem(4, { value: totalPrice })
         await transaction.wait()
         balanceAfter = await ethers.provider.getBalance(deployer.address)
         expect(balanceAfter).to.be.greaterThan(balanceBefore)
       })
 
       it('updates item to inactive', async () => {
-        await expect(await marketplace.getActiveBool(1)).to.equal(true)
-        transaction = await marketplace.connect(user2).buyItem(1, { value: totalPrice })
+        await expect(await marketplace.getActiveBool(4)).to.equal(true)
+        transaction = await marketplace.connect(user2).buyItem(4, { value: totalPrice })
         await transaction.wait()
-        await expect(await marketplace.getActiveBool(1)).to.equal(false)
+        await expect(await marketplace.getActiveBool(4)).to.equal(false)
       })
 
       it('transfers NFT from marketplace to buyer', async () => {
-        expect(await lp.ownerOf(1)).to.equal(marketplace.address)
-        transaction = await marketplace.connect(user2).buyItem(1, { value: totalPrice })
+        expect(await lp.ownerOf(4)).to.equal(marketplace.address)
+        transaction = await marketplace.connect(user2).buyItem(4, { value: totalPrice })
         await transaction.wait()
-        expect(await lp.ownerOf(1)).to.equal(user2.address)
+        expect(await lp.ownerOf(4)).to.equal(user2.address)
       })
 
       it('emits Bought event', async () => {
-        await expect(await marketplace.connect(user2).buyItem(1, { value: totalPrice })).to.emit(marketplace, 'Bought')
-          .withArgs(1, lp.address, 1, price, user1.address, user2.address)
+        await expect(await marketplace.connect(user2).buyItem(4, { value: totalPrice })).to.emit(marketplace, 'Bought')
+          .withArgs(4, lp.address, price, user1.address, user2.address)
       })
     })
 
     describe('Failure', () => {
 
-      it('item must exist in marketplace', async () => {
-        transaction = await lp.connect(user1).setApprovalForAll(marketplace.address, true)
-        await transaction.wait()
-        await expect(marketplace.connect(user1).createItem(lp.address, 1, ether(0))).to.be.revertedWith('Price must be greater than 0')
-      })
-
       it('not enough ether to buy item', async () => {
-        transaction = await lp.connect(user1).setApprovalForAll(marketplace.address, true)
-        await transaction.wait()
-        await expect(marketplace.connect(user1).createItem(lp.address, 1, ether(0))).to.be.revertedWith('Price must be greater than 0')
+        await expect(marketplace.connect(user2).buyItem(4, { value: price })).to.be.revertedWith('Not enough Ether to buy item')
       })
 
       it('item is not listed in marketplace', async () => {
-        transaction = await lp.connect(user1).setApprovalForAll(marketplace.address, true)
-        await transaction.wait()
-        await expect(marketplace.connect(user1).createItem(lp.address, 1, ether(0))).to.be.revertedWith('Price must be greater than 0')
-      })      
+        await expect(marketplace.connect(user2).buyItem(2, { value: totalPrice })).to.be.reverted        
+      })
     })
   })
 })

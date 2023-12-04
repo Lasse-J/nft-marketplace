@@ -16,7 +16,7 @@ const History = () => {
 
   const loadPurchasedItems = async () => {
     // Fetch purchased items from marketplace and filter by buyer set as user
-    const filter_purchase = marketplace.filters.Bought(null, null, null, null, null, account)
+    const filter_purchase = marketplace.filters.Bought(null, null, null, null, account)
     const results_purchase = await marketplace.queryFilter(filter_purchase)
     // Fetch metadata of each nft and add that to listedItem object
     const purchases = await Promise.all(results_purchase.map(async i => {
@@ -32,12 +32,12 @@ const History = () => {
       const metadata = await response.json();
       console.log('metadata', metadata)
       // get total price of item
-      const totalPrice = await marketplace.getTotalPrice(i.itemId)
+      const totalPrice = await marketplace.getTotalPrice(i.tokenId)
       // define listem item object
       let purchaseItem = {
         totalPrice,
         price: i.price,
-        itemId: i.itemId,
+        tokenId: i.tokenId,
         name: metadata.name,
         description: metadata.description,
         image: `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${i.tokenId}.png`
@@ -50,7 +50,7 @@ const History = () => {
 
   const loadSoldItems = async () => {
     // Fetch sold items from marketplace and filter by seller set as user
-    const filter_sold = marketplace.filters.Bought(null, null, null, null, account, null)
+    const filter_sold = marketplace.filters.Bought(null, null, null, account, null)
     const results_sold = await marketplace.queryFilter(filter_sold)
     // Fetch metadata of each nft and add that to listedItem object
     const solds = await Promise.all(results_sold.map(async i => {
@@ -66,12 +66,12 @@ const History = () => {
       const metadata = await response.json();
       console.log('metadata', metadata)
       // get total price of item
-      const totalPrice = await marketplace.getTotalPrice(i.itemId)
+      const totalPrice = await marketplace.getTotalPrice(i.tokenId)
       // define listem item object
       let soldItem = {
         totalPrice,
         price: i.price,
-        itemId: i.itemId,
+        tokenId: i.tokenId,
         name: metadata.name,
         description: metadata.description,
         image: `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${i.tokenId}.png`

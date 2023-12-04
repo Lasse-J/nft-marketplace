@@ -20,13 +20,13 @@ const List = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
 
-    if (address == "" || tokenId == "" || price == "") {
+    if (address === "" || tokenId === "" || price === "") {
       window.alert("Please provide a nft smart contract address, tokenId and price in ETH")
       return
     }
 
     if (address !== "" && tokenId !== "") {
-      setMessage("Loading image...")
+      setMessage("Fetching the NFT...")
           
     }
 

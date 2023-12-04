@@ -16,9 +16,9 @@ async function main() {
   const minter = accounts[1]
   const minter2 = accounts[2]
 
-  console.log(`Deployer address:, ${deployer.address}`);
-  console.log(`Minter #1 address:, ${minter.address}`);
-  console.log(`Minter #2 address:, ${minter2.address}\n`);
+  console.log(`Deployer address: ${deployer.address}`);
+  console.log(`Minter #1 address: ${minter.address}`);
+  console.log(`Minter #2 address: ${minter2.address}\n`);
 
   // Fetch Network
   const { chainId } = await ethers.provider.getNetwork()
@@ -138,7 +138,14 @@ async function main() {
 
   listing = await marketplace.connect(minter2).createItem(lp.address, 6, ether(6))
   await listing.wait()
-  console.log(`Listed #6 LassePunks in the Marketplace \n`)
+  console.log(`Listed #6 LassePunks in the Marketplace`)
+
+  approving = await lp.connect(minter2).approve(marketplace.address, 10)
+  await approving.wait()
+
+  listing = await marketplace.connect(minter2).createItem(lp.address, 10, ether(10))
+  await listing.wait()
+  console.log(`Listed #10 LassePunks in the Marketplace \n`)
 
 //  totalPrice = await marketplace.getTotalPrice(3)
 //  buying = await marketplace.connect(minter2).buyItem(3, { value: totalPrice })

@@ -114,23 +114,26 @@ export const loadAllItems = async (provider, marketplace, dispatch) => {
   // Fetch all items from Blockchain
   const { chainId } = await provider.getNetwork()
   marketplace = new ethers.Contract(config[chainId].marketplace.address, MARKETPLACE_ABI, provider)
+  const nft = new ethers.Contract(config[chainId].nft.address, NFT_ABI, provider)
 
-  const itemCount = await marketplace.itemCount();
+  const tokenCount = await nft.tokenCount()
+  console.log('tokenCount', tokenCount.toString())
+//  const itemCount = await marketplace.itemCount()
 
   const itemsPromises = [];
-    for (let i = 1; i <= itemCount; i++) {
-      itemsPromises.push(marketplace.items(i));
+    for (let i = 1; i <= tokenCount; i++) {
+      itemsPromises.push(marketplace.items(i)); // !!! does this mess up the items mapping?
     }
 
   const allItems = await Promise.all(itemsPromises);
-//  console.log('allItems', allItems)
+  console.log('allItems', allItems)
   const activeItems = allItems.filter(item => item.active);
-//  console.log('activeItems', activeItems)
+  console.log('activeItems', activeItems)
 
   dispatch(itemsLoaded(activeItems.map((item, index) => ({
     itemId: index + 1, // Assuming item IDs start at 1
-    nftAddress: item.nft,
     tokenId: item.tokenId.toString(),
+    nftAddress: item.nft,
     price: item.price.toString(),
     seller: item.seller,
     active: item.active

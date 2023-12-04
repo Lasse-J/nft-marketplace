@@ -37,8 +37,8 @@ const Buy = () => {
     const response = await fetch(URI);
     const metadata = await response.json();
     const totalPrice = await marketplace.getTotalPrice(item.tokenId);
-    console.log(totalPrice.toString())
-    console.log(item.price)
+//    console.log(totalPrice.toString())
+//    console.log(item.price)
     return {
       ...item,
       image: `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${item.tokenId}.png`,
@@ -88,9 +88,9 @@ const Buy = () => {
                   <Card.Img variant="top" src={item.image} />
                   <Card.Body color="secondary">
                     <Card.Title>{item.description} {item.name}</Card.Title>
-                    <Card.Text>itemId: {item.itemId}</Card.Text>
-                    <Card.Text>tokenId: {item.tokenId}</Card.Text>
-                    <Card.Text>price: {item.price}</Card.Text>
+{/*                    <Card.Text>itemId: {item.itemId}</Card.Text>*/}
+{/*                    <Card.Text>tokenId: {item.tokenId}</Card.Text>*/}
+{/*                    <Card.Text>price: {item.price}</Card.Text>*/}
                   </Card.Body>
                   <Card.Footer>
                     <div className='d-grid'>
