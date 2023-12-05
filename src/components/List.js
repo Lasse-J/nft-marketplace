@@ -27,7 +27,7 @@ const List = () => {
 
     if (address !== "" && tokenId !== "") {
       setMessage("Fetching the NFT...")
-          
+      setImage(`https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${tokenId}.png`)
     }
 
     setIsWaiting(true)
@@ -39,7 +39,7 @@ const List = () => {
       await transaction.wait()
       transaction = await marketplace.connect(signer).createItem(address, tokenId, price)
       transaction.wait()
-      setMessage("NFT listed to marketplace")
+      window.alert('NFT listed to marketplace')
     } catch {
       window.alert('Listing failed')
       setMessage("Please provide NFT address, tokenId and price")
@@ -52,14 +52,14 @@ const List = () => {
     <div>
       <div className="form">
         <form onSubmit={submitHandler}>
-          <p>0x5FbDB2315678afecb367f032d93F642f64180aa3</p>
-          <input type="text" placeholder="NFT address: 0x..." onChange={(e) => {setAddress(e.target.value)}}></input>
+          <p><strong>List any NFT on the marketplace:</strong></p>
+          <input type="text" id="nftAddress" placeholder="NFT address: 0x..." onChange={(e) => {setAddress(e.target.value)}}></input>
           <input type="number" placeholder="TokenId..." onChange={(e) => {setTokenId(e.target.value)}}></input>
           <input type="number" step=".001" placeholder="Price: 0.000 ETH..." onChange={(e) => {setPrice((ethers.utils.parseUnits(e.target.value)).toString())}}></input>
           <input type="submit" value="List for sale"></input>
         </form>
         <div className="image">
-          { !isWaiting && image ? (
+          { image ? (
             <img src={image} alt="NFT image" />
           ) : isWaiting ? (
             <div className="image__placeholder">

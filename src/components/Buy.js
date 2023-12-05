@@ -33,8 +33,8 @@ const Buy = () => {
 
   // Function to fetch metadata for each active item and set state
   const fetchMetadata = async (item) => { 
-    let URI = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.tokenId}.json`
-    const response = await fetch(URI);
+    let URL = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.tokenId}.json`
+    const response = await fetch(URL);
     const metadata = await response.json();
     const totalPrice = await marketplace.getTotalPrice(item.tokenId);
 //    console.log(totalPrice.toString())
@@ -46,7 +46,8 @@ const Buy = () => {
       description: metadata.description,
       totalPrice: totalPrice.toString(),   // totalPrice.toString(),  // item.price,
       tokenId: (item.tokenId).toString(),
-      active: item.active
+      active: item.active,
+      link: URL
     };
   };
   
@@ -87,7 +88,8 @@ const Buy = () => {
                 <Card>
                   <Card.Img variant="top" src={item.image} />
                   <Card.Body color="secondary">
-                    <Card.Title>{item.description} {item.name}</Card.Title>
+                    <Card.Title><center>{item.description} {item.name}</center></Card.Title>
+                      <Card.Text><a href={item.link} target="_blank" rel="noreferrer">metadata {item.tokenId}.json</a></Card.Text>
 {/*                    <Card.Text>itemId: {item.itemId}</Card.Text>*/}
 {/*                    <Card.Text>tokenId: {item.tokenId}</Card.Text>*/}
 {/*                    <Card.Text>price: {item.price}</Card.Text>*/}
