@@ -8,7 +8,6 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 import Navigation from './Navigation';
 import Buy from './Buy';
 import List from './List';
-// import Create from './Create';
 import Mint from './Mint';
 import History from './History';
 

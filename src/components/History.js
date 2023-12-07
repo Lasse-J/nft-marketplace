@@ -89,14 +89,14 @@ const History = () => {
   }, [])
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center body">
       {purchases.length > 0 ?
         <div className="px-5 container">
           <Row xs={1} md={2} lg={4} className="g-4 py-5">
             {purchases.map((item, index) => (
               <Col key={index} className="overflow-hidden">
                 <Card>
-                  <Card.Img variant="top" src={item.image} />
+                  <Card.Img variant="top" src={item.image} className="zoom" />
                   <Card.Body color="secondary">
                     <Card.Title>{item.description} {item.name}</Card.Title>
                   </Card.Body>

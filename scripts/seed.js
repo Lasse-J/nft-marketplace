@@ -101,49 +101,49 @@ async function main() {
 //  approving = await lp.connect(minter).approve(marketplace.address, 1)
 //  await approving.wait()
 
-  listing = await marketplace.connect(minter).createItem(lp.address, 1, ether(1))
+  listing = await marketplace.connect(minter).createItem(lp.address, 1, ether(0.011))
   await listing.wait()
   console.log(`Listed #1 LassePunks in the Marketplace`)
 
 //  approving = await lp.connect(minter).approve(marketplace.address, 2)
 //  await approving.wait()
 
-  listing = await marketplace.connect(minter).createItem(lp.address, 2, ether(2))
+  listing = await marketplace.connect(minter).createItem(lp.address, 2, ether(0.012))
   await listing.wait()
   console.log(`Listed #2 LassePunks in the Marketplace`)
 
 //  approving = await lp.connect(minter).approve(marketplace.address, 3)
 //  await approving.wait()
 
-  listing = await marketplace.connect(minter).createItem(lp.address, 3, ether(3))
+  listing = await marketplace.connect(minter).createItem(lp.address, 3, ether(0.013))
   await listing.wait()
   console.log(`Listed #3 LassePunks in the Marketplace`)
 
   approving = await lp.connect(minter2).approve(marketplace.address, 4)
   await approving.wait()
 
-  listing = await marketplace.connect(minter2).createItem(lp.address, 4, ether(4))
+  listing = await marketplace.connect(minter2).createItem(lp.address, 4, ether(0.014))
   await listing.wait()
   console.log(`Listed #4 LassePunks in the Marketplace`)
 
   approving = await lp.connect(minter2).approve(marketplace.address, 5)
   await approving.wait()
 
-  listing = await marketplace.connect(minter2).createItem(lp.address, 5, ether(5))
+  listing = await marketplace.connect(minter2).createItem(lp.address, 5, ether(0.015))
   await listing.wait()
   console.log(`Listed #5 LassePunks in the Marketplace`)
 
   approving = await lp.connect(minter2).approve(marketplace.address, 6)
   await approving.wait()
 
-  listing = await marketplace.connect(minter2).createItem(lp.address, 6, ether(6))
+  listing = await marketplace.connect(minter2).createItem(lp.address, 6, ether(0.016))
   await listing.wait()
   console.log(`Listed #6 LassePunks in the Marketplace`)
 
   approving = await lp.connect(minter2).approve(marketplace.address, 10)
   await approving.wait()
 
-  listing = await marketplace.connect(minter2).createItem(lp.address, 10, ether(10))
+  listing = await marketplace.connect(minter2).createItem(lp.address, 10, ether(0.020))
   await listing.wait()
   console.log(`Listed #10 LassePunks in the Marketplace \n`)
 

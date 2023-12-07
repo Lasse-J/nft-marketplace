@@ -119,10 +119,11 @@ export const loadAllItems = async (provider, marketplace, dispatch) => {
   const tokenCount = await nft.tokenCount()
   console.log('tokenCount', tokenCount.toString())
 //  const itemCount = await marketplace.itemCount()
+//  console.log('itemCount', itemCount.toString())
 
   const itemsPromises = [];
     for (let i = 1; i <= tokenCount; i++) {
-      itemsPromises.push(marketplace.items(i)); // !!! does this mess up the items mapping?
+      itemsPromises.push(marketplace.items(i));
     }
 
   const allItems = await Promise.all(itemsPromises);
@@ -158,3 +159,22 @@ export const buy = async (provider, marketplace, item, totalPrice, dispatch) => 
     console.error('Buy failed', error);
   }
 };
+
+// ------------------------
+// LIST ITEM TO MARKETPLACE
+
+//export const list = async (provider, marketplace, address, tokenId, price) => {
+//  try {
+//    dispatch(listRequest());
+//    const signer = provider.getSigner();
+//    let transaction = await nfts[0].connect(signer).approve(marketplace.address, tokenId)
+//    await transaction.wait()
+//    transaction = await marketplace.connect(signer).createItem(address, tokenId, price)
+//    await transaction.wait()
+//    dispatch(listSuccess(transaction.hash));
+//  } catch (error) {
+//    dispatch(listFail());
+//    console.error('Listing failed', error);
+//
+//  }
+//}

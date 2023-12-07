@@ -1,9 +1,3 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
 const hre = require("hardhat");
 
 async function main() {
@@ -21,17 +15,17 @@ async function main() {
 
 // --------------------------------------------------
 
-//  const NAMEAI = 'Lasse AI Generated NFT'
-//  const SYMBOLAI = 'LAIN'
-//  const MAX_SUPPLYAI = '999999'
-//  const BASE_URIAI = ''
+  const NAME2 = 'OtherPunks'
+  const SYMBOL2 = 'OP'
+  const MAX_SUPPLY2 = '25'
+  const BASE_URI2 = "ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry/"
 
-  // Deploy Lasse AI Generated NFT
-//  const AINFT = await hre.ethers.getContractFactory('NFT')
-//  let ainft = await AINFT.deploy(NAMEAI, SYMBOLAI, MAX_SUPPLYAI, BASE_URIAI)
+  // Deploy OtherPunks NFT
+  const OtherPunks = await hre.ethers.getContractFactory('NFT')
+  let op = await OtherPunks.deploy(NAME2, SYMBOL2, MAX_SUPPLY2, BASE_URI2)
 
-//  await ainft.deployed()
-//  console.log(`Lasse AI Generated NFT deployed to: ${ainft.address}`)
+  await op.deployed()
+  console.log(`OtherPunks NFT deployed to: ${op.address}`)
 
 // --------------------------------------------------
 
@@ -44,11 +38,9 @@ async function main() {
   await marketplace.deployed()
   console.log(`Marketplace deployed to: ${marketplace.address}\n`)
 
-  console.log('Finished.')
+  console.log('Finished.\n')
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;

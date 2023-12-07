@@ -5,7 +5,6 @@ import { Card, Button, Row, Col, Spinner } from 'react-bootstrap';
 import { itemSelector } from '../store/selectors';
 import config from '../config.json'
 
-// Components
 import Loading from './Loading';
 import Alert from './Alert';
 
@@ -37,21 +36,24 @@ const Buy = () => {
     const response = await fetch(URL);
     const metadata = await response.json();
     const totalPrice = await marketplace.getTotalPrice(item.tokenId);
-//    console.log(totalPrice.toString())
-//    console.log(item.price)
     return {
       ...item,
       image: `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${item.tokenId}.png`,
       name: metadata.name,
       description: metadata.description,
-      totalPrice: totalPrice.toString(),   // totalPrice.toString(),  // item.price,
+      totalPrice: totalPrice.toString(),
       tokenId: (item.tokenId).toString(),
       active: item.active,
-      link: URL
+      link: URL,
+      background: metadata.attributes[0].value,
+      face: metadata.attributes[1].value,
+      hats_and_hair: metadata.attributes[2].value,
+      eyes_and_glasses: metadata.attributes[3].value,
+      nose: metadata.attributes[4].value,
+      mouth: metadata.attributes[5].value  
     };
   };
-  
-  // Function to load active items and their metadata
+
   const loadMarketplaceItems = async () => {
     setLoading(true);
     const itemsWithMetadata = await Promise.all(activeItems.map(async (item) => {
@@ -66,8 +68,30 @@ const Buy = () => {
     const priceInEther = ethers.utils.formatUnits(item.totalPrice, 'ether');
     await buy(provider, marketplace, item, priceInEther, dispatch);
     setShowAlert(true);
+    await loadBalances(nfts, account, dispatch, provider);
+    await loadAllItems(provider, marketplace, dispatch);
   };
-  
+
+  const displayPopUp = (item, index) => {
+    let popUpBox = document.getElementById(`popUp-${index}`);
+    popUpBox.classList.add("display");
+  };
+
+  const closePopUp = (index) => {
+    let popUpBox = document.getElementById(`popUp-${index}`);
+    popUpBox.classList.remove("display");
+  };
+
+//  let popUpBox = document.getElementById("popUp");
+//
+//  const displayPopUp = async (item) => {
+//    popUpBox.classList.add("display");
+//  };
+//
+//  const closePopUp = async (item) => {
+//    popUpBox.classList.remove("display");
+//  };
+
   useEffect(() => {
     if (provider && marketplace) {
       loadMarketplaceItems();
@@ -76,7 +100,7 @@ const Buy = () => {
   
   if (loading) {
     return <Loading />;
-  }
+  };
   
   return (
     <div className="flex justify-content-center">
@@ -86,25 +110,31 @@ const Buy = () => {
             {listedItems.map((item, index) => (
               <Col key={index} className="overflow-hidden">
                 <Card>
-                  <Card.Img variant="top" src={item.image} />
-                  <Card.Body color="secondary">
-                    <Card.Title><center>{item.description} {item.name}</center></Card.Title>
-                      <Card.Text><a href={item.link} target="_blank" rel="noreferrer">metadata {item.tokenId}.json</a></Card.Text>
-{/*                    <Card.Text>itemId: {item.itemId}</Card.Text>*/}
-{/*                    <Card.Text>tokenId: {item.tokenId}</Card.Text>*/}
-{/*                    <Card.Text>price: {item.price}</Card.Text>*/}
-                  </Card.Body>
-                  <Card.Footer>
-                    <div className='d-grid'>
-                      {isBuying ? (
-                        <Spinner animation="border" />
-                      ) : (
-                        <Button onClick={() => buyMarketItem(item)} variant="primary" size="lg">
-                           Buy for {ethers.utils.formatUnits(item.totalPrice, 'ether')} ETH
-                        </Button>
-                      )}
+                  <Card.Img variant="top" src={item.image} className="zoom" onClick={() => displayPopUp(item, index)} />
+                    <div className={`pop-up pop-up-${index}`} id={`popUp-${index}`}>
+                      <hr />
+                      <p>{item.description} {item.name}</p>
+                      <p>Background: {item.background}</p>
+                      <p>Face: {item.face}</p>
+                      <p>Hats and Hair: {item.hats_and_hair}</p>
+                      <p>Eyes and Glasses: {item.eyes_and_glasses}</p>
+                      <p>Nose: {item.nose}</p>
+                      <p>Mouth: {item.mouth}</p>
+                      <button onClick={() => closePopUp(index)}>Close</button>
                     </div>
-                  </Card.Footer>
+                  <Card.Body color="secondary">
+                    <Card.Title><center>{item.description} {item.name}</center></Card.Title>                 
+                        <div className='d-grid'>
+                          {isBuying ? (
+                            <Spinner animation="border align-items-center" />
+                          ) : (
+                            <button className="buy__button" onClick={() => buyMarketItem(item)} variant="primary" size="lg">
+                               Buy for {ethers.utils.formatUnits(item.totalPrice, 'ether')} ETH
+                            </button>
+                          )}
+                        </div>
+                    
+                  </Card.Body>                  
                 </Card>
               </Col>
             ))}

@@ -1,19 +1,23 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
 
 import Spinner from 'react-bootstrap/Spinner';
 
 import Loading from './Loading';
 
+import { loadBalances, loadAllItems } from '../store/interactions';
+
 const Mint = () => {
   const provider = useSelector(state => state.provider.connection);
+  const account = useSelector(state => state.provider.account);
   const nfts = useSelector(state => state.nfts.contracts);
   const tokenCount = useSelector(state => state.nfts.tokenCount[0]);
   const baseURI = useSelector(state => state.nfts.baseURI[0]);
   const maxSupply = useSelector(state => state.nfts.maxSupply[0]);
   const nftBalance = useSelector(state => state.nfts.nftBalances[0]);
   const marketplace = useSelector(state => state.marketplace.contract);
+  const dispatch = useDispatch();
 
   const cost = 0
   const [message, setMessage] = useState('Go ahead click Mint NFT, it is FREE!')
@@ -23,7 +27,7 @@ const Mint = () => {
 
   const [isWaiting, setIsWaiting] = useState(false)
 
-  const mintHandler = async (e) => {
+  const mintNFT = async (e) => {
     e.preventDefault()
     setIsWaiting(true)
 
@@ -47,21 +51,24 @@ const Mint = () => {
     } catch {
       window.alert('Mint rejected')
     }
-
+    await loadBalances(nfts, account, dispatch, provider);
+    await loadAllItems(provider, marketplace, dispatch);
     setIsWaiting(false)
   }
 
   return (
     <div>
       <div className="form">
-        <form onSubmit={mintHandler}>
+        <form onSubmit={mintNFT}>
           <p><strong>NFT Collection:&nbsp;</strong> LassePunks</p>
           <p><strong>Address:&nbsp;</strong> {nfts[0].address}</p> 
           <p><strong>Available to Mint:&nbsp;</strong> {maxSupply - tokenCount}</p>
           <p><strong>Cost to Mint:&nbsp;</strong> {ethers.utils.formatUnits(cost, 'ether')} ETH</p>
           <p><strong>You own:&nbsp;</strong> {nftBalance.toString()} </p>
-          <input type="submit" value="Mint NFT"></input>
-          
+          <button className="mint__button" onClick={(e) => mintNFT()} variant="primary" size="lg">
+            Mint NFT
+          </button>
+          <hr />
             { !isWaiting && URL && (
               <p><strong>Token #{currentToken} minted!</strong></p>
             )}
