@@ -24,7 +24,7 @@ async function main() {
   const { chainId } = await ethers.provider.getNetwork()
 
   // Fetch LassePunks Contract
-  console.log(`Fetching NFT contract...`)
+  console.log(`Fetching NFT contracts...`)
   const lp = await ethers.getContractAt('NFT', config[chainId].nft.address)
   console.log(`LassePunks fetched: ${lp.address} \n`)
 
@@ -98,22 +98,13 @@ async function main() {
   approving = await lp.connect(minter).setApprovalForAll(marketplace.address, true)
   await approving.wait()
 
-//  approving = await lp.connect(minter).approve(marketplace.address, 1)
-//  await approving.wait()
-
   listing = await marketplace.connect(minter).createItem(lp.address, 1, ether(0.011))
   await listing.wait()
   console.log(`Listed #1 LassePunks in the Marketplace`)
 
-//  approving = await lp.connect(minter).approve(marketplace.address, 2)
-//  await approving.wait()
-
   listing = await marketplace.connect(minter).createItem(lp.address, 2, ether(0.012))
   await listing.wait()
   console.log(`Listed #2 LassePunks in the Marketplace`)
-
-//  approving = await lp.connect(minter).approve(marketplace.address, 3)
-//  await approving.wait()
 
   listing = await marketplace.connect(minter).createItem(lp.address, 3, ether(0.013))
   await listing.wait()
@@ -146,11 +137,6 @@ async function main() {
   listing = await marketplace.connect(minter2).createItem(lp.address, 10, ether(0.020))
   await listing.wait()
   console.log(`Listed #10 LassePunks in the Marketplace \n`)
-
-//  totalPrice = await marketplace.getTotalPrice(3)
-//  buying = await marketplace.connect(minter2).buyItem(3, { value: totalPrice })
-//  await buying.wait()
-//  console.log(`Bought #3 LassePunks in the Marketplace \n`)
 
   console.log(`Finished.\n`)
 

@@ -108,18 +108,12 @@ export const loadBalances = async (nfts, account, dispatch, provider) => {
 // LOAD ALL MARKETPLACE ITEMS
 
 export const loadAllItems = async (provider, marketplace, dispatch) => {
-//  console.log('loadAllItems triggered')
   provider = new ethers.providers.Web3Provider(window.ethereum)
 
-  // Fetch all items from Blockchain
   const { chainId } = await provider.getNetwork()
   marketplace = new ethers.Contract(config[chainId].marketplace.address, MARKETPLACE_ABI, provider)
   const nft = new ethers.Contract(config[chainId].nft.address, NFT_ABI, provider)
-
   const tokenCount = await nft.tokenCount()
-  console.log('tokenCount', tokenCount.toString())
-//  const itemCount = await marketplace.itemCount()
-//  console.log('itemCount', itemCount.toString())
 
   const itemsPromises = [];
     for (let i = 1; i <= tokenCount; i++) {
@@ -127,20 +121,16 @@ export const loadAllItems = async (provider, marketplace, dispatch) => {
     }
 
   const allItems = await Promise.all(itemsPromises);
-  console.log('allItems', allItems)
   const activeItems = allItems.filter(item => item.active);
-  console.log('activeItems', activeItems)
 
   dispatch(itemsLoaded(activeItems.map((item, index) => ({
-    itemId: index + 1, // Assuming item IDs start at 1
+    itemId: index + 1,
     tokenId: item.tokenId.toString(),
     nftAddress: item.nft,
     price: item.price.toString(),
     seller: item.seller,
     active: item.active
   }))));
-
-  console.log('loadAllItems finalized.')
 }
 
 // --------------------
@@ -158,23 +148,5 @@ export const buy = async (provider, marketplace, item, totalPrice, dispatch) => 
     dispatch(buyFail());
     console.error('Buy failed', error);
   }
+  await loadAllItems(provider, marketplace, dispatch)
 };
-
-// ------------------------
-// LIST ITEM TO MARKETPLACE
-
-//export const list = async (provider, marketplace, address, tokenId, price) => {
-//  try {
-//    dispatch(listRequest());
-//    const signer = provider.getSigner();
-//    let transaction = await nfts[0].connect(signer).approve(marketplace.address, tokenId)
-//    await transaction.wait()
-//    transaction = await marketplace.connect(signer).createItem(address, tokenId, price)
-//    await transaction.wait()
-//    dispatch(listSuccess(transaction.hash));
-//  } catch (error) {
-//    dispatch(listFail());
-//    console.error('Listing failed', error);
-//
-//  }
-//}

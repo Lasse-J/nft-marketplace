@@ -40,8 +40,6 @@ contract NFT is ERC721URIStorage, Ownable {
 		return(tokenCount);
 	}
 
-	// Return metadata IPFS URI
-    // EG: 'ipfs://QmQ2jnDYecFhrf3asEWjyjZRX1pZSsNWG3qHzmNDvXa9qg/1.json'
     function tokenURI(uint256 _tokenId) 
         public
         view

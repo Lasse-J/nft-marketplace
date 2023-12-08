@@ -14,16 +14,11 @@ contract Marketplace is ReentrancyGuard, Ownable {
 
 	struct Item {
 		// Attributes of a marketplace item
-			// token ID
-			// address of the NFT contract
-			// seller's price
-			// seller's address
-			// active: listed or not?
-		uint256 tokenId;
-		IERC721 nft;
-		uint256 price;
-		address payable seller;
-		bool active;
+		uint256 tokenId; // tokenId
+		IERC721 nft; // address of the NFT contract
+		uint256 price; // seller's price
+		address payable seller; // seller's address
+		bool active; // active: listed or not?
 	}
 
 	// Mapping to store all items (key: token ID => value: Item)
@@ -96,7 +91,6 @@ contract Marketplace is ReentrancyGuard, Ownable {
 		uint256 _totalPrice = getTotalPrice(item.tokenId); // dont use itemId
 
 		// Requirements for buying
-//		require(_itemId > 0 && _itemId <= itemCount, 'Item does not exist');
 		require(msg.value >= _totalPrice, 'Not enough Ether to buy item');
 		require(item.active, 'Item is not active in marketplace');
 

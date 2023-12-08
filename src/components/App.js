@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Container } from 'react-bootstrap'
-import { ethers } from 'ethers';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 
 // Components
@@ -17,13 +16,11 @@ import {
   loadAccount,
   loadNfts,
   loadMarketplace,
-  loadAllItems,
-  loadBalances
+  loadAllItems
 } from '../store/interactions';
 
 function App() {
   const dispatch = useDispatch()
-  const account = useSelector(state => state.provider.account)
 
   const loadBlockchainData = async () => {
     // Initiate provider
@@ -39,11 +36,12 @@ function App() {
 
     // Fetch current account from Metamask when account switched
     window.ethereum.on('accountsChanged', async () => {
-      const account = await loadAccount(dispatch)
+      await loadAccount(dispatch)
+      await loadMarketplace(chainId, provider, dispatch)
     })
 
     // Initiate contracts
-    const nfts = await loadNfts(provider, chainId, dispatch)
+    await loadNfts(provider, chainId, dispatch)
     const marketplace = await loadMarketplace(chainId, provider, dispatch)
 
     // Load all marketplace items
@@ -52,23 +50,20 @@ function App() {
 
   useEffect(() => {
     loadBlockchainData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return(
     <Container>
       <HashRouter>
-
         <Navigation/>
-
         <hr />
-
         <Routes>
           <Route exact path="/" element={<Buy />} />
           <Route path="/list" element={<List />} />
           <Route path="/mint" element={<Mint />} />
           <Route path="/history" element={<History />} />
         </Routes>
-
       </HashRouter>
     </Container>
   )

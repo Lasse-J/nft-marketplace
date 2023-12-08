@@ -4,11 +4,9 @@ import { ethers } from 'ethers';
 import { Card, Button, Row, Col, Spinner } from 'react-bootstrap';
 import { itemSelector } from '../store/selectors';
 import config from '../config.json'
-
 import Loading from './Loading';
 import Alert from './Alert';
-
-import { loadBalances, loadAllItems, buy } from '../store/interactions';
+import { loadBalances, loadAllItems, loadMarketplace, buy } from '../store/interactions';
 
 const Buy = () => {
   const provider = useSelector(state => state.provider.connection);
@@ -24,13 +22,13 @@ const Buy = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(true);
  
-  // Use the itemSelector to get only active items
+  // Using the itemSelector to get only active items
   const activeItems = useSelector(itemSelector);
 
   // State to hold items with fetched metadata
   const [listedItems, setListedItems] = useState([]);
 
-  // Function to fetch metadata for each active item and set state
+  // Fetch metadata for each active item and set state
   const fetchMetadata = async (item) => { 
     let URL = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.tokenId}.json`
     const response = await fetch(URL);
@@ -70,6 +68,8 @@ const Buy = () => {
     setShowAlert(true);
     await loadBalances(nfts, account, dispatch, provider);
     await loadAllItems(provider, marketplace, dispatch);
+    await loadMarketplaceItems();
+    await loadMarketplace(chainId, provider, dispatch)
   };
 
   const displayPopUp = (item, index) => {
@@ -81,16 +81,6 @@ const Buy = () => {
     let popUpBox = document.getElementById(`popUp-${index}`);
     popUpBox.classList.remove("display");
   };
-
-//  let popUpBox = document.getElementById("popUp");
-//
-//  const displayPopUp = async (item) => {
-//    popUpBox.classList.add("display");
-//  };
-//
-//  const closePopUp = async (item) => {
-//    popUpBox.classList.remove("display");
-//  };
 
   useEffect(() => {
     if (provider && marketplace) {

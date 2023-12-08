@@ -1,11 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
-
 import Spinner from 'react-bootstrap/Spinner';
-
-import Loading from './Loading';
-
 import { loadBalances, loadAllItems } from '../store/interactions';
 
 const Mint = () => {
@@ -13,7 +9,6 @@ const Mint = () => {
   const account = useSelector(state => state.provider.account);
   const nfts = useSelector(state => state.nfts.contracts);
   const tokenCount = useSelector(state => state.nfts.tokenCount[0]);
-  const baseURI = useSelector(state => state.nfts.baseURI[0]);
   const maxSupply = useSelector(state => state.nfts.maxSupply[0]);
   const nftBalance = useSelector(state => state.nfts.nftBalances[0]);
   const marketplace = useSelector(state => state.marketplace.contract);
@@ -36,12 +31,8 @@ const Mint = () => {
       const signer = await provider.getSigner()
       const transaction = await nfts[0].connect(signer).mint(`ipfs://${process.env.REACT_APP_IPFS_METADATA_CID}/${tokenCount + 1}.json`)
       await transaction.wait()
-      console.log('tokenCount', tokenCount)
       let currentToken = Number(tokenCount) + 1;
-      console.log('currentToken', currentToken)
       setCurrentToken(currentToken)
-      const getURI = await nfts[0].connect(signer).tokenURI(`${currentToken}`)
-      console.log('getURI done', getURI)
       let URL = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${currentToken}.json`
       setURL(URL)
       let image = `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${currentToken}.png`
@@ -84,7 +75,7 @@ const Mint = () => {
           ) :
           !isWaiting && image !== null ? (
             <div className="image__placeholder">
-              <img src={image} alt="NFT image" />
+              <img src={image} alt="NFT img" />
             </div>
           ) : (
             <div className="image__placeholder">

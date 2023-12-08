@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 // Components
 import Tabs from './Tabs';
 
-import { loadAccount, loadBalances } from '../store/interactions';
+import { loadAccount, loadBalances, loadMarketplace } from '../store/interactions';
 
 import config from '../config.json'
 
@@ -20,6 +20,7 @@ const Navigation = () => {
   const connectHandler = async () => {
     const account = await loadAccount(dispatch)
     await loadBalances(nfts, account, dispatch, provider)
+    await loadMarketplace(chainId, provider, dispatch)
   }
 
   const networkHandler = async (e) => {

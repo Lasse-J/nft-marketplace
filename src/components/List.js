@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
-
+import config from '../config.json'
 import Spinner from 'react-bootstrap/Spinner';
-
 import { loadBalances, loadAllItems } from '../store/interactions';
 
 const List = () => {
   const provider = useSelector(state => state.provider.connection);
   const account = useSelector(state => state.provider.account);
+  const chainId = useSelector(state => state.provider.chainId);  
   const marketplace = useSelector(state => state.marketplace.contract);
   const nfts = useSelector(state => state.nfts.contracts);
   const dispatch = useDispatch();
@@ -38,12 +38,13 @@ const List = () => {
 
       try {
         const signer = await provider.getSigner()
-        let transaction = await nfts[0].connect(signer).approve(marketplace.address, tokenId)
-        await transaction.wait()
-        transaction = await marketplace.connect(signer).createItem(address, tokenId, price)
-        transaction.wait()
-        window.alert('NFT listed to marketplace')
-      } catch {
+        if (address === config[chainId].nft.address) {
+          let transaction = await nfts[0].connect(signer).approve(marketplace.address, tokenId)
+          await transaction.wait()
+          transaction = await marketplace.connect(signer).createItem(address, tokenId, price)
+          transaction.wait()
+          window.alert('NFT listed to marketplace')
+        }} catch {
         window.alert('Listing failed')
         setMessage("Please provide NFT address, tokenId and price")
       }
@@ -56,17 +57,17 @@ const List = () => {
     <div>
       <div className="form">
         <form onSubmit={listMarketItem}>
-          <p><strong>List any NFT on the marketplace:</strong></p>
+          <p><strong>List NFT on the marketplace:</strong></p>
           <input type="text" id="nftAddress" placeholder="NFT address: 0x..." onChange={(e) => {setAddress(e.target.value)}}></input>
           <input type="number" placeholder="TokenId..." onChange={(e) => {setTokenId(e.target.value)}}></input>
-          <input type="number" step=".001" placeholder="Price: 0.000 ETH..." onChange={(e) => {setPrice((ethers.utils.parseUnits(e.target.value)).toString())}}></input>
+          <input type="number" step=".0001" placeholder="Price: 0.0000 ETH..." onChange={(e) => {setPrice((ethers.utils.parseUnits(e.target.value)).toString())}}></input>
           <button className="list__button" onClick={(e) => listMarketItem()} variant="primary" size="lg">
             List for sale
           </button>
         </form>
         <div className="image">
           { image ? (
-            <img src={image} alt="NFT image" />
+            <img src={image} alt="NFT img" />
           ) : isWaiting ? (
             <div className="image__placeholder">
               <Spinner animation="border" />

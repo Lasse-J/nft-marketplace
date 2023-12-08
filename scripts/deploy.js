@@ -11,21 +11,7 @@ async function main() {
   let lp = await LassePunks.deploy(NAME, SYMBOL, MAX_SUPPLY, BASE_URI)
 
   await lp.deployed()
-  console.log(`LassePunks deployed to: ${lp.address}`)
-
-// --------------------------------------------------
-
-  const NAME2 = 'OtherPunks'
-  const SYMBOL2 = 'OP'
-  const MAX_SUPPLY2 = '25'
-  const BASE_URI2 = "ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry/"
-
-  // Deploy OtherPunks NFT
-  const OtherPunks = await hre.ethers.getContractFactory('NFT')
-  let op = await OtherPunks.deploy(NAME2, SYMBOL2, MAX_SUPPLY2, BASE_URI2)
-
-  await op.deployed()
-  console.log(`OtherPunks NFT deployed to: ${op.address}`)
+  console.log(`LassePunks NFT collection deployed to: ${lp.address}`)
 
 // --------------------------------------------------
 

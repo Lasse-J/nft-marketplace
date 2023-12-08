@@ -23,10 +23,9 @@ body {
   font-family: "Play";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /*  background-color: var(--clr-light-blue); */
   background-image: linear-gradient(var(--clr-light-blue), var(--clr-white));
-  background-repeat:no-repeat;
-  background-size:cover;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /* ------------------------------------------------------ */
@@ -197,14 +196,14 @@ form input[type="number"] {
 
 .zoom {
   padding: 0px;
-  transition: transform .2s; /* Animation */
+  transition: transform .3s;
   width: 288px;
   height: 288px;
   margin: 0 auto;
 }
 
 .zoom:hover {
-  transform: scale(1.05); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  transform: scale(1.05);
 }
 
 /* ------------------------------------------------------ */
