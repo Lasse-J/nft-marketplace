@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ethers } from 'ethers';
-import { Card, Button, Row, Col, Spinner } from 'react-bootstrap';
+import { Card, Row, Col, Spinner } from 'react-bootstrap';
 import { itemSelector } from '../store/selectors';
-import config from '../config.json'
 import Loading from './Loading';
 import Alert from './Alert';
 import { loadBalances, loadAllItems, loadMarketplace, buy } from '../store/interactions';
@@ -85,8 +84,8 @@ const Buy = () => {
   useEffect(() => {
     if (provider && marketplace) {
       loadMarketplaceItems();
-    }
-  }, [provider, marketplace]);
+    } // eslint-disable-next-line
+  }, [marketplace, provider]);
   
   if (loading) {
     return <Loading />;
