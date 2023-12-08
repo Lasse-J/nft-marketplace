@@ -19,7 +19,6 @@ const Mint = () => {
   const [URL, setURL] = useState(null)
   const [image, setImage] = useState(null)
   const [currentToken, setCurrentToken] = useState(null)
-
   const [isWaiting, setIsWaiting] = useState(false)
 
   const mintNFT = async (e) => {

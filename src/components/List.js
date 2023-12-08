@@ -18,7 +18,6 @@ const List = () => {
   const [price, setPrice] = useState(null)
   const [image, setImage] = useState(null)
   const [isWaiting, setIsWaiting] = useState(false)
-
   const [message, setMessage] = useState('Please provide NFT address, tokenId and price')
 
   const listMarketItem = async (e) => {

@@ -139,7 +139,6 @@ async function main() {
   console.log(`Listed #10 LassePunks in the Marketplace \n`)
 
   console.log(`Finished.\n`)
-
 }
 
 main().catch((error) => {

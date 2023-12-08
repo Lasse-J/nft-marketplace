@@ -1,12 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { HashRouter, Routes, Route } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
-
-// Components
 import Tabs from './Tabs';
-
 import { loadAccount, loadBalances, loadMarketplace } from '../store/interactions';
-
 import config from '../config.json'
 
 const Navigation = () => {
@@ -58,7 +53,6 @@ const Navigation = () => {
           <option value="0" disabled>Select Network</option>
           <option value="0x7A69">Localhost</option>
           <option value="0xaa36a7">Sepolia</option>
-          <option value="0x5">Goerli</option>
         </Form.Select>
       </div>
         {account ? (

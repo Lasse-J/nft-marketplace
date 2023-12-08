@@ -9,15 +9,12 @@ const Alert = ({ message, transactionHash, variant, setShowAlert }) => {
       className='alert'
     >
       <BootstrapAlert.Heading>{message}</BootstrapAlert.Heading>
-
       <hr />
-
       {transactionHash && (
         <p>
           {transactionHash.slice(0, 6) + '...' + transactionHash.slice(-6)}
         </p>
       )}
-      
     </BootstrapAlert>
   )
 }

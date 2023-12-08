@@ -7,8 +7,8 @@ export const nfts = createSlice({
     symbols: [],
     maxSupply: [],
     baseURI: [],
-    tokenCount: [0, 0],
-    nftBalances: [0, 0]
+    tokenCount: [0],
+    nftBalances: [0]
   },
   reducers: {
     setContracts: (state, action) => {
