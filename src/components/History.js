@@ -7,6 +7,8 @@ const History = () => {
   const account = useSelector(state => state.provider.account);
   const marketplace = useSelector(state => state.marketplace.contract);
 
+  const IPFS_METADATA_CID="bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry"
+  const IPFS_IMAGE_CID="bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54"
   const [purchases, setPurchases] = useState([])
   const [solds, setSolds] = useState([])
 
@@ -19,7 +21,7 @@ const History = () => {
     // Fetch metadata of each nft and add that to listedItem object
     const purchases = await Promise.all(results_purchase.map(async i => {
       i = i.args
-      const URI = `https://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry.ipfs.nftstorage.link/${i.tokenId}.json`
+      const URI = `https://${IPFS_METADATA_CID}.ipfs.nftstorage.link/${i.tokenId}.json`
       const response = await fetch(URI);
       const metadata = await response.json();
       const totalPrice = await marketplace.getTotalPrice(i.tokenId)
@@ -29,7 +31,7 @@ const History = () => {
         tokenId: i.tokenId,
         name: metadata.name,
         description: metadata.description,
-        image: `https://bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54.ipfs.nftstorage.link/${i.tokenId}.png`
+        image: `https://${IPFS_IMAGE_CID}.ipfs.nftstorage.link/${i.tokenId}.png`
       }
       return purchaseItem
     }))
@@ -45,7 +47,7 @@ const History = () => {
     // Fetch metadata of each nft and add that to listedItem object
     const solds = await Promise.all(results_sold.map(async i => {
       i = i.args
-      const URI = `https://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry.ipfs.nftstorage.link/${i.tokenId}.json`
+      const URI = `https://${IPFS_METADATA_CID}.ipfs.nftstorage.link/${i.tokenId}.json`
       const response = await fetch(URI);
       const metadata = await response.json();
       const totalPrice = await marketplace.getTotalPrice(i.tokenId)
@@ -55,7 +57,7 @@ const History = () => {
         tokenId: i.tokenId,
         name: metadata.name,
         description: metadata.description,
-        image: `https://bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54.ipfs.nftstorage.link/${i.tokenId}.png`
+        image: `https://${IPFS_IMAGE_CID}.ipfs.nftstorage.link/${i.tokenId}.png`
       }
       return soldItem
     }))

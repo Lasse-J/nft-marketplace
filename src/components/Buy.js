@@ -15,6 +15,8 @@ const Buy = () => {
   const nfts = useSelector(state => state.nfts.contracts);
   const dispatch = useDispatch();
 
+  const IPFS_METADATA_CID="bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry"
+  const IPFS_IMAGE_CID="bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54"
   const isBuying = useSelector(state => state.marketplace.buying.isBuying);
   const isSuccess = useSelector(state => state.marketplace.buying.isSuccess);
   const transactionHash = useSelector(state => state.marketplace.buying.transactionHash);
@@ -29,13 +31,13 @@ const Buy = () => {
 
   // Fetch metadata for each active item and set state
   const fetchMetadata = async (item) => { 
-    let URL = `https://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry.ipfs.nftstorage.link/${item.tokenId}.json`
+    let URL = `https://${IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.tokenId}.json`
     const response = await fetch(URL);
     const metadata = await response.json();
     const totalPrice = await marketplace.getTotalPrice(item.tokenId);
     return {
       ...item,
-      image: `https://bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54.ipfs.nftstorage.link/${item.tokenId}.png`,
+      image: `https://${IPFS_IMAGE_CID}.ipfs.nftstorage.link/${item.tokenId}.png`,
       name: metadata.name,
       description: metadata.description,
       totalPrice: totalPrice.toString(),
