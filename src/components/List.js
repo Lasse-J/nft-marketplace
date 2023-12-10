@@ -30,7 +30,7 @@ const List = () => {
 
     if (address !== "" && tokenId !== "") {
       setMessage("Fetching the NFT...")
-      setImage(`https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${tokenId}.png`)
+      setImage(`https://bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54.ipfs.nftstorage.link/${tokenId}.png`)
     }
 
     setIsWaiting(true)

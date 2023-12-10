@@ -29,13 +29,13 @@ const Buy = () => {
 
   // Fetch metadata for each active item and set state
   const fetchMetadata = async (item) => { 
-    let URL = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${item.tokenId}.json`
+    let URL = `https://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry.ipfs.nftstorage.link/${item.tokenId}.json`
     const response = await fetch(URL);
     const metadata = await response.json();
     const totalPrice = await marketplace.getTotalPrice(item.tokenId);
     return {
       ...item,
-      image: `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${item.tokenId}.png`,
+      image: `https://bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54.ipfs.nftstorage.link/${item.tokenId}.png`,
       name: metadata.name,
       description: metadata.description,
       totalPrice: totalPrice.toString(),
