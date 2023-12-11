@@ -14,8 +14,6 @@ const Mint = () => {
   const marketplace = useSelector(state => state.marketplace.contract);
   const dispatch = useDispatch();
 
-  const IPFS_METADATA_CID="bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry"
-  const IPFS_IMAGE_CID="bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54"
   const cost = 0
   const [message, setMessage] = useState('Go ahead click Mint NFT, it is FREE!')
   const [URL, setURL] = useState(null)
@@ -30,13 +28,13 @@ const Mint = () => {
     try {
       setMessage("NFT is being minted...")
       const signer = await provider.getSigner()
-      const transaction = await nfts[0].connect(signer).mint(`ipfs://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry/${tokenCount + 1}.json`)
+      const transaction = await nfts[0].connect(signer).mint(`ipfs://${process.env.REACT_APP_IPFS_METADATA_CID}/${tokenCount + 1}.json`)
       await transaction.wait()
       let currentToken = Number(tokenCount) + 1;
       setCurrentToken(currentToken)
-      let URL = `https://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry.ipfs.nftstorage.link/${currentToken}.json`
+      let URL = `https://${process.env.REACT_APP_IPFS_METADATA_CID}.ipfs.nftstorage.link/${currentToken}.json`
       setURL(URL)
-      let image = `https://bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54.ipfs.nftstorage.link/${currentToken}.png`
+      let image = `https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${currentToken}.png`
       setImage(image)
       setMessage("Please click on Mint NFT")
       window.alert('NFT minted succesfully. Reveal NFT and see the metadata.')

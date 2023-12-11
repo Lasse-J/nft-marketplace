@@ -13,7 +13,6 @@ const List = () => {
   const nfts = useSelector(state => state.nfts.contracts);
   const dispatch = useDispatch();
 
-  const IPFS_IMAGE_CID="bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54"
   const [address, setAddress] = useState(null)
   const [tokenId, setTokenId] = useState(null)
   const [price, setPrice] = useState(null)
@@ -31,7 +30,7 @@ const List = () => {
 
     if (address !== "" && tokenId !== "") {
       setMessage("Fetching the NFT...")
-      setImage(`https://bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54.ipfs.nftstorage.link/${tokenId}.png`)
+      setImage(`https://${process.env.REACT_APP_IPFS_IMAGE_CID}.ipfs.nftstorage.link/${tokenId}.png`)
     }
 
     setIsWaiting(true)
