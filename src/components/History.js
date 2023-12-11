@@ -21,7 +21,7 @@ const History = () => {
     // Fetch metadata of each nft and add that to listedItem object
     const purchases = await Promise.all(results_purchase.map(async i => {
       i = i.args
-      const URI = `https://${IPFS_METADATA_CID}.ipfs.nftstorage.link/${i.tokenId}.json`
+      const URI = `https://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry.ipfs.nftstorage.link/${i.tokenId}.json`
       const response = await fetch(URI);
       const metadata = await response.json();
       const totalPrice = await marketplace.getTotalPrice(i.tokenId)
@@ -31,7 +31,7 @@ const History = () => {
         tokenId: i.tokenId,
         name: metadata.name,
         description: metadata.description,
-        image: `https://${IPFS_IMAGE_CID}.ipfs.nftstorage.link/${i.tokenId}.png`
+        image: `https://bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54.ipfs.nftstorage.link/${i.tokenId}.png`
       }
       return purchaseItem
     }))
@@ -47,7 +47,7 @@ const History = () => {
     // Fetch metadata of each nft and add that to listedItem object
     const solds = await Promise.all(results_sold.map(async i => {
       i = i.args
-      const URI = `https://${IPFS_METADATA_CID}.ipfs.nftstorage.link/${i.tokenId}.json`
+      const URI = `https://bafybeibd7tfptdtntg47tbekr6ik3ozsmt5dotxc5sc56kynrkljsszfry.ipfs.nftstorage.link/${i.tokenId}.json`
       const response = await fetch(URI);
       const metadata = await response.json();
       const totalPrice = await marketplace.getTotalPrice(i.tokenId)
@@ -57,7 +57,7 @@ const History = () => {
         tokenId: i.tokenId,
         name: metadata.name,
         description: metadata.description,
-        image: `https://${IPFS_IMAGE_CID}.ipfs.nftstorage.link/${i.tokenId}.png`
+        image: `https://bafybeib5dxbty7wv22mjatwopbmhhufq2nkhzj2vpvcnqddzmrco7wvu54.ipfs.nftstorage.link/${i.tokenId}.png`
       }
       return soldItem
     }))
