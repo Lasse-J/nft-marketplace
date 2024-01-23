@@ -1,7 +1,8 @@
 # Lasse NFT Marketplace Portfolio Project
 
 Introduction Video: https://www.loom.com/share/67ec8a29f197473693b96ebc17262ace?sid=4255d652-07af-473c-aac3-347934a3c5f2
-Frontend Tutorial: https://www.loom.com/share/08d04e336bd54fdd8234abcab3ac7d34?sid=34c1bcf9-86df-40bb-9134-8754d0ba9a17
+Frontend Video: https://www.loom.com/share/08d04e336bd54fdd8234abcab3ac7d34?sid=34c1bcf9-86df-40bb-9134-8754d0ba9a17
+Backend Video: https://www.loom.com/share/3c6b77572b614f60ab755e34ca0ba903?sid=85212833-95fe-4733-858a-a19cb48975d6
 
     What the project does
 This is a portfolio project deployed on Ethereum testnet that showcases NFT Marketplace functions that communicate to the blockchain. User can mint new NFTs, list them on the marketplace for sale, buy NFTs from marketplace and view their purchase and sales histories. The project is built with Solidity, Javascript, React, HTML and CSS.
